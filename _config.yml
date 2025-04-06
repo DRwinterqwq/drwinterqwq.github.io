@@ -100,6 +100,6 @@ service-worker: true
 friends: [
     {
         title: "哔哩哔哩",
-        href: "https://bilibili.com/
+        href: "https://bilibili.com/",
     }
 ]
