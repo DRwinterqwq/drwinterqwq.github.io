@@ -3,23 +3,6 @@ layout: page
 description: "欢迎来到本博客！"
 ---
 
-<!--
-<ul class="pager">
-  
-    <li class="next">
-        <a href="https://klovien.github.io/1-resources/" data-toggle="tooltip" data-placement="top" title="学习资料集">
-                        开始学习<br>
-        </a>
-    </li>           
-  
-    <li class="next">
-        <a href="https://klovien.github.io/2018/12/10/三叶语简介/" data-toggle="tooltip" data-placement="top" title="三叶语简介">
-                        了解更多<br>
-        </a>
-    </li>
-                    
-</ul>
--->
 
 {% for post in paginator.posts %}
 <div class="post-preview">
@@ -32,9 +15,13 @@ description: "欢迎来到本博客！"
             {{ post.subtitle }}
         </h3>
         {% endif %}
-        <div class="post-content-preview">
-            {{ post.content | strip_html | truncate:200 }}
-        </div>
+ <div class="post-content-preview">
+    {% if post.preview-text %}
+        {{ post.preview-text }}
+    {% else %}
+        <img src="{{ site.baseurl }}/{{ post.header-img }}" alt="header image">
+    {% endif %}
+</div>
     </a>
     <p class="post-meta">
         Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
