@@ -2,31 +2,25 @@
 layout: default
 ---
 
-.intro-header {
-    position: relative; /* 确保伪元素定位正确 */
-    overflow: hidden;   /* 防止内容溢出 */
+<style type="text/css">
+header.intro-header {
+    position: relative;
+    background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}');
 }
 
-.intro-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
+{% if site.header-mask %}
+header.intro-header .header-mask {
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3); /* 黑色遮罩，透明度 0.3 */
-    pointer-events: none; /* 避免遮挡内容的交互 */
-    z-index: 1; /* 确保遮罩位于内容下方 */
+    position: absolute;
+    background: rgba(0,0,0, {{ site.header-mask }});
 }
-
-.intro-header .container {
-    position: relative;
-    z-index: 2; /* 确保内容在遮罩上方 */
-}
+{% endif %}
+</style>
 
 <!-- Page Header -->
-<header class="intro-header" 
-    style="background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}');">
+<header class="intro-header">
+    <div class="header-mask"></div>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
