@@ -8,19 +8,33 @@ layout: default
         height: auto;
         display: block;
     }
+    .header-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: white; /* 根据图片背景选择合适的颜色 */
+    }
+    .site-title {
+        font-size: calc(2em + 1vw); /* 根据屏幕宽度动态调整标题大小 */
+        margin-bottom: 0.5em;
+    }
+    .site-description {
+        font-size: calc(1em + 0.5vw); /* 根据屏幕宽度动态调整描述大小 */
+    }
 </style>
 
 
 <!-- Page Header -->
 <header class="intro-header">
     <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" alt="Header Image" class="header-img">
-    <div class="container">
+    <div class="container header-content">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="site-heading">
-                    <h1>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">{{ page.description }}</span>
+                    <h1 class="site-title">{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</h1>
+                    <span class="subheading site-description">{{ page.description }}</span>
                 </div>
             </div>
         </div>
