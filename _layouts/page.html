@@ -5,8 +5,8 @@ layout: default
 <!-- Page Header -->
 <header class="intro-header" 
     style="background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}');
-           mask: rgba(0, 0, 0, {{ site.header-mask | default: '0' }});
-           -webkit-mask: rgba(0, 0, 0, {{ site.header-mask | default: '0' }});">
+           mask: rgba(0, 0, 0, 0.3);
+           -webkit-mask: rgba(0, 0, 0, 0.3);">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
