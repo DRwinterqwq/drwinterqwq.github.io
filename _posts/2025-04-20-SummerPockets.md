@@ -4,7 +4,7 @@ title:      【推荐】Summer Pockets (REFLECTION BLUE)
 subtitle:   “在一个小岛的“救赎”之旅”
 date:       2025-04-20
 author:     DRwinterovo
-header-img: img_post/SPRB/head.png
+header-img: img_post/SPRB/head.jpg
 header-mask: 0.3
 catalog: false
 tags:
