@@ -43,11 +43,13 @@ layout: default
 </header>
 
 <!-- 计算并显示字数 -->
-<div class="word-count">
+<div class="word-count" style="text-align: center; margin-top: 20px; font-size: 16px; color: #555;">
   {% capture content_without_punctuation %}
-    {{ content | replace: ',', '' | replace: '.', '' | replace: '!', '' | replace: '?', '' | replace: '，', '' | replace: '。', '' | replace: '！', '' | replace: '？', '' | replace: ':', '' | replace: ';', '' | replace: '：', '' | replace: '；', '' | replace: '、', '' | replace: '“', '' | replace: '”', '' | replace: '‘', '' | replace: '’', '' | replace: '(', '' | replace: ')', '' | replace: '（', '' | replace: '）', '' }}
+    {{ content | replace: ',', '' | replace: '.', '' | replace: '!', '' | replace: '?', '' | replace: '，', '' | replace: '。', '' | replace: '！', '' | replace: '？', '' | replace: ':', '' | replace: '：', '' }}
   {% endcapture %}
-  <p>全文总字数（不含标点符号）：{{ content_without_punctuation | strip_html | size }}</p>
+  <p style="background: #f9f9f9; display: inline-block; padding: 10px 20px; border-radius: 8px; border: 1px solid #ddd;">
+    全文总字数（不含标点符号）：<strong style="color: #333;">{{ content_without_punctuation | strip_html | size }}</strong>
+  </p>
 </div>
 
 <!-- Post Content -->
