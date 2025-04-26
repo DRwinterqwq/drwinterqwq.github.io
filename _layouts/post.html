@@ -50,16 +50,16 @@ layout: default
             <!-- Post Container -->
             <div class="post-container"
                 style="
-                    width: 90%; /* 动态适配屏幕宽度 */
-                    max-width: 720px; /* 限制正文最大宽度 */
+                    width: 90%;
+                    max-width: 720px;
                     background: linear-gradient(135deg, #ffffff, #f2f2f2);
                     padding: 20px;
                     border-radius: 10px;
                     border: 1px solid #e0e0e0;
                     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
                     margin: 40px auto;
-                    font-size: 14px; /* 正文字体大小 */
-                    line-height: 1.6; /* 行间距提高可读性 */">
+                    font-size: 14px;
+                    line-height: 1.6;">
                 
                 {{ content | markdownify }}
 
@@ -68,11 +68,11 @@ layout: default
             <!-- Navigation Buttons -->
             <div class="navigation-buttons"
                 style="
-                    width: 90%; /* 按钮区域与正文一致 */
-                    max-width: 720px; /* 限制按钮区域最大宽度 */
+                    width: 90%;
+                    max-width: 720px;
                     display: flex;
                     justify-content: space-between;
-                    flex-wrap: wrap; /* 在小屏幕上按钮自动换行 */
+                    flex-wrap: wrap;
                     gap: 10px;
                     margin: 20px auto;">
                 
@@ -80,15 +80,18 @@ layout: default
                 <a href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}" 
                     class="btn btn-navigation previous"
                     style="
-                        flex: 1 1 calc(50% - 10px); /* 按钮宽度占据 50%，减去间距 */
+                        flex: 1 1 calc(50% - 10px);
                         text-align: center;
                         padding: 10px;
-                        background-color: #e9ecef;
-                        border: 1px solid #dcdcdc;
+                        background-color: #f8f9fa;
+                        border: 1px solid #e0e0e0;
                         border-radius: 8px;
                         text-decoration: none;
                         color: #333;
-                        font-size: 14px;">
+                        font-size: 14px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;">
                     Previous<br>
                     <span>{{ page.previous.title }}</span>
                 </a>
@@ -98,15 +101,18 @@ layout: default
                 <a href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}" 
                     class="btn btn-navigation next"
                     style="
-                        flex: 1 1 calc(50% - 10px); /* 按钮宽度占据 50%，减去间距 */
+                        flex: 1 1 calc(50% - 10px);
                         text-align: center;
                         padding: 10px;
-                        background-color: #e9ecef;
-                        border: 1px solid #dcdcdc;
+                        background-color: #f8f9fa;
+                        border: 1px solid #e0e0e0;
                         border-radius: 8px;
                         text-decoration: none;
                         color: #333;
-                        font-size: 14px;">
+                        font-size: 14px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;">
                     Next<br>
                     <span>{{ page.next.title }}</span>
                 </a>
@@ -169,15 +175,3 @@ layout: default
     </ul>
     {% endif %}
 </div>
-
-<!-- Async Loading -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
