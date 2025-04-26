@@ -132,35 +132,60 @@ function showPopupMessage(message) {
             </div>  
 
 <div style="width: 100%; max-width: 720px; margin: 0 auto;">
-  <!-- 分享与截图按钮 -->
-  <div id="action-buttons" style="
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;">
-    <!-- 分享按钮 -->
-    <button id="share-btn-1" style="
-        padding: 8px 12px;
-        background-color: #ffffff;
-        color: black;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
-      分享
-    </button>
+  <!-- 分享按钮 -->
+<button id="share-btn-1" style="
+    padding: 8px 12px;
+    background-color: #ffffff;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+  分享
+</button>
 
-    <!-- 截图按钮 -->
-    <button id="screenshot-btn" style="
-        padding: 8px 12px;
-        background-color: #ffffff;
-        color: black;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
-      截图
-    </button>
-  </div>
+<!-- 截图按钮 -->
+<button id="screenshot-btn" style="
+    padding: 8px 12px;
+    background-color: #ffffff;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+  截图
+</button>
+
+<!-- 添加功能脚本 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  // 分享功能
+  document.getElementById("share-btn-1").addEventListener("click", function () {
+    if (navigator.share) {
+      navigator.share({
+        title: document.title,
+        text: "分享这篇文章：",
+        url: window.location.href,
+      })
+        .then(() => console.log("分享成功"))
+        .catch((error) => console.error("分享失败", error));
+    } else {
+      alert("您的浏览器不支持分享功能，请手动复制链接分享！");
+    }
+  });
+
+  // 截图功能
+  document.getElementById("screenshot-btn").addEventListener("click", function () {
+    const element = document.body; // 要截图的区域
+    html2canvas(element).then((canvas) => {
+      // 将截图结果转换为图片并下载
+      const link = document.createElement("a");
+      link.download = "screenshot.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+  });
+</script>
 
   <!-- 导航按钮 -->
   <div class="navigation-buttons" style="
