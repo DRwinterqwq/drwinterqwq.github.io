@@ -76,6 +76,72 @@ layout: default
 
             </div>  
 
+<!-- 分享功能 -->
+<div id="share-container" style="text-align: center; margin-top: 20px;">
+  <button id="share-btn" style="
+      padding: 10px 15px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  ">
+      分享
+  </button>
+</div>
+
+<!-- 截图功能 -->
+<div id="screenshot-container" style="text-align: center; margin-top: 20px;">
+  <button id="screenshot-btn" style="
+      padding: 10px 15px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  ">
+      截图
+  </button>
+</div>
+
+<!-- 功能脚本 -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+  // 分享按钮功能
+  document.getElementById('share-btn').addEventListener('click', function () {
+      const title = document.querySelector('h1').innerText || '文章标题'; // 获取文章标题
+      const url = window.location.href; // 获取当前文章的链接
+      const shareText = `【本文章 ${title}】+ ${url}，欢迎前来阅读！`;
+
+      // 复制内容到剪贴板
+      navigator.clipboard.writeText(shareText).then(() => {
+          alert('已复制到剪贴板！');
+      }).catch(err => {
+          console.error('复制失败：', err);
+          alert('复制失败，请手动复制内容。');
+      });
+  });
+
+  // 截图按钮功能
+  document.getElementById('screenshot-btn').addEventListener('click', function () {
+      const page = document.documentElement; // 获取整个网页
+      html2canvas(page, {
+          scale: window.devicePixelRatio, // 使用设备分辨率
+          useCORS: true // 支持跨域资源
+      }).then(function (canvas) {
+          const link = document.createElement('a');
+          link.download = 'screenshot.png'; // 下载的文件名
+          link.href = canvas.toDataURL('image/png'); // 转换为图片 URL
+          link.click(); // 自动触发下载
+      }).catch(function (error) {
+          console.error('截图失败：', error);
+          alert('截图失败，请重试。');
+      });
+  });
+</script>
+
             <!-- Navigation Buttons -->
             <div class="navigation-buttons"
                 style="
