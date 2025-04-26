@@ -52,12 +52,13 @@ layout: default
     <div class="container">
         <div class="row">
 
-    <!-- Post Container -->
+            <!-- Post Container -->
             <div class="
                 col-lg-8 col-lg-offset-2
                 col-md-10 col-md-offset-1
-                post-container">
-
+                post-container"
+                style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+                
                 {{ content | markdownify }}
 
                 <hr style="visibility: hidden;">
@@ -82,6 +83,9 @@ layout: default
                 </ul>
 
             </div>  
+        </div>
+    </div>
+</article>
 
     <!-- Side Catalog Container -->
         {% if page.catalog %}
