@@ -6,6 +6,58 @@ layout: default
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
 <!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
 
+<!-- 弹出框 -->
+<div id="popup-message" class="popup hidden">
+  <span id="popup-text"></span>
+</div>
+
+<style>
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff; 
+  color: #333;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1000;
+}
+
+.popup.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.popup.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+</style>
+
+<script>
+function showPopupMessage(message) {
+  const popup = document.getElementById('popup-message');
+  const popupText = document.getElementById('popup-text');
+
+  // 设置消息内容
+  popupText.textContent = message;
+
+  // 显示弹出框
+  popup.classList.remove('hidden');
+  popup.classList.add('show');
+
+  // 定时隐藏弹出框
+  setTimeout(() => {
+    popup.classList.remove('show');
+    popup.classList.add('hidden');
+  }, 3000); // 3秒后隐藏
+}
+
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header {
@@ -80,7 +132,7 @@ layout: default
 <div id="share-container" style="text-align: left; margin-top: 20px;">
   <button id="share-btn" style="
       padding: 8px 12px;
-      background-color: #007BFF;
+      background-color: #ffffff;
       color: white;
       border: none;
       border-radius: 5px;
@@ -93,9 +145,9 @@ layout: default
 
 <!-- 截图功能 -->
 <div id="screenshot-container" style="text-align: left; margin-top: 20px;">
-  <button id="screenshot-btn" style="
+  <button id="share-btn" style="
       padding: 8px 12px;
-      background-color: #4CAF50;
+      background-color: #ffffff;
       color: white;
       border: none;
       border-radius: 5px;
@@ -106,41 +158,38 @@ layout: default
   </button>
 </div>
 
-<!-- 功能脚本 -->
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script>
-  // 分享按钮功能
-  document.getElementById('share-btn').addEventListener('click', function () {
-      const title = document.querySelector('h1').innerText || '文章标题'; // 获取文章标题
-      const url = window.location.href; // 获取当前文章的链接
-      const shareText = `【${title}】${url}，欢迎前来阅读！`;
+<!-- 分享脚本部分 -->
+document.getElementById('share-container').addEventListener('click', function () {
+  const title = document.querySelector('h1').innerText || '文章标题'; // 获取文章标题
+  const url = window.location.href; // 获取当前文章的链接
+  const shareText = `【${title}】${url}，欢迎前来阅读！`;
 
-      // 复制内容到剪贴板
-      navigator.clipboard.writeText(shareText).then(() => {
-          alert('已复制到剪贴板！');
-      }).catch(err => {
-          console.error('复制失败：', err);
-          alert('复制失败，请手动复制内容。');
-      });
+  // 复制内容到剪贴板
+  navigator.clipboard.writeText(shareText).then(() => {
+    showPopupMessage('分享成功！'); // 弹出提示
+  }).catch(err => {
+    console.error('复制失败：', err);
+    showPopupMessage('分享失败，请手动复制内容。'); // 弹出提示
   });
+});
 
-  // 截图按钮功能
-  document.getElementById('screenshot-btn').addEventListener('click', function () {
-      const page = document.documentElement; // 获取整个网页
-      html2canvas(page, {
-          scale: window.devicePixelRatio, // 使用设备分辨率
-          useCORS: true // 支持跨域资源
-      }).then(function (canvas) {
-          const link = document.createElement('a');
-          link.download = 'screenshot.png'; // 下载的文件名
-          link.href = canvas.toDataURL('image/png'); // 转换为图片 URL
-          link.click(); // 自动触发下载
-      }).catch(function (error) {
-          console.error('截图失败：', error);
-          alert('截图失败，请重试。');
-      });
+<!-- 截图脚本部分 -->
+document.getElementById('screenshot-container').addEventListener('click', function () {
+  const page = document.documentElement; // 获取整个网页
+  html2canvas(page, {
+    scale: window.devicePixelRatio, // 使用设备分辨率
+    useCORS: true // 支持跨域资源
+  }).then(function (canvas) {
+    const link = document.createElement('a');
+    link.download = 'screenshot.png'; // 下载的文件名
+    link.href = canvas.toDataURL('image/png'); // 转换为图片 URL
+    link.click(); // 自动触发下载
+    showPopupMessage('截图成功！'); // 弹出提示
+  }).catch(function (error) {
+    console.error('截图失败：', error);
+    showPopupMessage('截图失败，请重试。'); // 弹出提示
   });
-</script>
+});
 
             <!-- Navigation Buttons -->
             <div class="navigation-buttons"
