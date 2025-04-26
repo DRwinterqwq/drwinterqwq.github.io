@@ -131,94 +131,63 @@ function showPopupMessage(message) {
 
             </div>  
 
-<!-- 分享和截图按钮 -->
-<div id="action-buttons" style="
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;">
-  <!-- 分享按钮 -->
-  <button id="share-btn-1" style="
-      padding: 8px 12px;
-      background-color: #ffffff;
-      color: #333;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
-    分享
-  </button>
+<div style="width: 100%; max-width: 720px; margin: 0 auto;">
+  <!-- 分享与截图按钮 -->
+  <div id="action-buttons" style="
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;">
+    <!-- 分享按钮 -->
+    <button id="share-btn-1" style="
+        padding: 8px 12px;
+        background-color: #ffffff;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+      分享
+    </button>
 
-  <!-- 截图按钮 -->
-  <button id="screenshot-btn" style="
-      padding: 8px 12px;
-      background-color: #ffffff;
-      color: #333;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
-    截图
-  </button>
-</div>
+    <!-- 截图按钮 -->
+    <button id="screenshot-btn" style="
+        padding: 8px 12px;
+        background-color: #ffffff;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+      截图
+    </button>
+  </div>
 
-<script>
-document.getElementById('share-btn-1').addEventListener('click', function () {
-  const title = document.querySelector('h1').innerText || '文章标题'; // 获取文章标题
-  const url = window.location.href; // 获取当前文章的链接
-  const shareText = `【${title}】${url}，欢迎前来阅读！`;
-
-  // 复制内容到剪贴板
-  navigator.clipboard.writeText(shareText).then(() => {
-    showPopupMessage('分享成功！'); // 弹出提示
-  }).catch(err => {
-    console.error('复制失败：', err);
-    showPopupMessage('分享失败，请手动复制内容。'); // 弹出提示
-  });
-});
-
-document.getElementById('screenshot-btn').addEventListener('click', function () {
-  const page = document.documentElement; // 获取整个网页
-  html2canvas(page, {
-    scale: window.devicePixelRatio, // 使用设备分辨率
-    useCORS: true // 支持跨域资源
-  }).then(function (canvas) {
-    const link = document.createElement('a');
-    link.download = 'screenshot.png'; // 下载的文件名
-    link.href = canvas.toDataURL('image/png'); // 转换为图片 URL
-    link.click(); // 自动触发下载
-    showPopupMessage('截图成功！'); // 弹出提示
-  }).catch(function (error) {
-    console.error('截图失败：', error);
-    showPopupMessage('截图失败，请重试。'); // 弹出提示
-  });
-});
-</script>
-
-<!-- 导航按钮 -->
-<div class="navigation-buttons"
-    style="
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin: 20px auto;
-        width: 90%;
-        max-width: 720px;">
-        
+  <!-- 导航按钮 -->
+  <div class="navigation-buttons" style="
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      width: 100%;">
     {% if page.previous.url %}
     <a href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}" 
         class="btn btn-navigation previous"
         style="
-            flex: 1 1 calc(50% - 10px);
+            flex: 1 1 calc(48% - 5px); /* 每个按钮占48%宽度 */
             text-align: center;
             padding: 10px;
             background-color: #ffffff;
             border: 1px solid #e0e0e0;
             border-radius: 8px;
             text-decoration: none;
-            color: #333;">
-        Previous<br>
-        <span>{{ page.previous.title }}</span>
+            color: #333;
+            font-size: 14px;
+            white-space: nowrap; /* 防止换行 */
+            overflow: hidden; /* 超出隐藏 */
+            text-overflow: ellipsis; /* 超出显示省略号 */;
+            box-sizing: border-box;">
+      Previous<br>
+      <span>{{ page.previous.title }}</span>
     </a>
     {% endif %}
 
@@ -226,18 +195,24 @@ document.getElementById('screenshot-btn').addEventListener('click', function () 
     <a href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}" 
         class="btn btn-navigation next"
         style="
-            flex: 1 1 calc(50% - 10px);
+            flex: 1 1 calc(48% - 5px); /* 每个按钮占48%宽度 */
             text-align: center;
             padding: 10px;
             background-color: #ffffff;
             border: 1px solid #e0e0e0;
             border-radius: 8px;
             text-decoration: none;
-            color: #333;">
-        Next<br>
-        <span>{{ page.next.title }}</span>
+            color: #333;
+            font-size: 14px;
+            white-space: nowrap; /* 防止换行 */
+            overflow: hidden; /* 超出隐藏 */
+            text-overflow: ellipsis; /* 超出显示省略号 */;
+            box-sizing: border-box;">
+      Next<br>
+      <span>{{ page.next.title }}</span>
     </a>
     {% endif %}
+  </div>
 </div>
         </div>
     </div>
