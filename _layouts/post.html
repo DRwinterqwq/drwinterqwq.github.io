@@ -6,61 +6,6 @@ layout: default
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
 <!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
 
-<!-- 弹出框 -->
-<div id="popup-message" class="popup hidden">
-  <span id="popup-text"></span>
-</div>
-
-<style>
-.popup {
-  position: fixed;
-  top: -100px; /* 初始位置在屏幕外顶部 */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #fff; 
-  color: #333;
-  padding: 15px 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  opacity: 0; /* 初始透明度 */
-  visibility: hidden; /* 初始不可见 */
-  transition: top 0.5s ease, opacity 0.5s ease; /* 动画效果 */
-  z-index: 1000;
-}
-
-.popup.show {
-  top: 100px; /* 弹出框的目标位置 */
-  opacity: 1; /* 显示 */
-  visibility: visible;
-}
-
-.popup.hidden {
-  top: -100px; /* 隐藏时回到顶部 */
-  opacity: 0; /* 隐藏 */
-  visibility: hidden;
-}
-</style>
-
-<script>
-function showPopupMessage(message) {
-  const popup = document.getElementById('popup-message');
-  const popupText = document.getElementById('popup-text');
-
-  // 设置消息内容
-  popupText.textContent = message;
-
-  // 显示弹出框
-  popup.classList.remove('hidden');
-  popup.classList.add('show');
-
-  // 定时隐藏弹出框
-  setTimeout(() => {
-    popup.classList.remove('show');
-    popup.classList.add('hidden');
-  }, 3000); // 3秒后隐藏
-}
-</script>
-
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header {
@@ -131,114 +76,61 @@ function showPopupMessage(message) {
 
             </div>  
 
-<div style="width: 100%; max-width: 720px; margin: 0 auto;">
-  <!-- 分享按钮 -->
-<button id="share-btn-1" style="
-    padding: 8px 12px;
-    background-color: #ffffff;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
-  分享
-</button>
+            <!-- Navigation Buttons -->
+            <div class="navigation-buttons"
+                style="
+                    width: 90%;
+                    max-width: 720px;
+                    display: flex;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    margin: 20px auto;">
+                
+                {% if page.previous.url %}
+                <a href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}" 
+                    class="btn btn-navigation previous"
+                    style="
+                        flex: 1 1 calc(50% - 10px);
+                        text-align: center;
+                        padding: 10px;
+                        background-color: #ffffff;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 8px;
+                        text-decoration: none;
+                        color: #333;
+                        font-size: 14px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;">
+                    Previous<br>
+                    <span>{{ page.previous.title }}</span>
+                </a>
+                {% endif %}
 
-<!-- 截图按钮 -->
-<button id="screenshot-btn" style="
-    padding: 8px 12px;
-    background-color: #ffffff;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
-  截图
-</button>
+                {% if page.next.url %}
+                <a href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}" 
+                    class="btn btn-navigation next"
+                    style="
+                        flex: 1 1 calc(50% - 10px);
+                        text-align: center;
+                        padding: 10px;
+                        background-color: #ffffff;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 8px;
+                        text-decoration: none;
+                        color: #333;
+                        font-size: 14px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;">
+                    Next<br>
+                    <span>{{ page.next.title }}</span>
+                </a>
+                {% endif %}
 
-<!-- 添加功能脚本 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script>
-  // 分享功能
-  document.getElementById("share-btn-1").addEventListener("click", function () {
-    if (navigator.share) {
-      navigator.share({
-        title: document.title,
-        text: "分享这篇文章：",
-        url: window.location.href,
-      })
-        .then(() => console.log("分享成功"))
-        .catch((error) => console.error("分享失败", error));
-    } else {
-      alert("您的浏览器不支持分享功能，请手动复制链接分享！");
-    }
-  });
+            </div>
 
-  // 截图功能
-  document.getElementById("screenshot-btn").addEventListener("click", function () {
-    const element = document.body; // 要截图的区域
-    html2canvas(element).then((canvas) => {
-      // 将截图结果转换为图片并下载
-      const link = document.createElement("a");
-      link.download = "screenshot.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-    });
-  });
-</script>
-
-  <!-- 导航按钮 -->
-  <div class="navigation-buttons" style="
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      width: 90%;">
-    {% if page.previous.url %}
-    <a href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}" 
-        class="btn btn-navigation previous"
-        style="
-            flex: 1 1 calc(48% - 5px); /* 每个按钮占48%宽度 */
-            text-align: center;
-            padding: 10px;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #333;
-            font-size: 14px;
-            white-space: nowrap; /* 防止换行 */
-            overflow: hidden; /* 超出隐藏 */
-            text-overflow: ellipsis; /* 超出显示省略号 */;
-            box-sizing: border-box;">
-      Previous<br>
-      <span>{{ page.previous.title }}</span>
-    </a>
-    {% endif %}
-
-    {% if page.next.url %}
-    <a href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}" 
-        class="btn btn-navigation next"
-        style="
-            flex: 1 1 calc(48% - 5px); /* 每个按钮占48%宽度 */
-            text-align: center;
-            padding: 10px;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #333;
-            font-size: 14px;
-            white-space: nowrap; /* 防止换行 */
-            overflow: hidden; /* 超出隐藏 */
-            text-overflow: ellipsis; /* 超出显示省略号 */;
-            box-sizing: border-box;">
-      Next<br>
-      <span>{{ page.next.title }}</span>
-    </a>
-    {% endif %}
-  </div>
-</div>
         </div>
     </div>
 </article>
