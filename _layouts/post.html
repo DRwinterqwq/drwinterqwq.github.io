@@ -67,8 +67,14 @@ layout: default
                 
                 {{ content | markdownify }}
 
-                <hr style="visibility: hidden;">
+            </div>  
 
+            <!-- Navigation Buttons -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                navigation-buttons">
+                
                 <ul class="pager">
                     {% if page.previous.url %}
                     <li class="previous">
@@ -87,12 +93,12 @@ layout: default
                     </li>
                     {% endif %}
                 </ul>
+                
+            </div>
 
-            </div>  
         </div>
     </div>
 </article>
-
     <!-- Side Catalog Container -->
         {% if page.catalog %}
             <div class="
