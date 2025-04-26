@@ -53,34 +53,30 @@ layout: default
         <div class="row">
 
             <!-- Post Container -->
-            <div class="
-                col-lg-6 col-lg-offset-3
-                col-md-8 col-md-offset-2
-                post-container"
+            <div class="post-container"
                 style="
+                    width: 90%; /* 动态适配屏幕宽度 */
                     background: linear-gradient(135deg, #ffffff, #f2f2f2);
                     padding: 20px;
                     border-radius: 10px;
                     border: 1px solid #e0e0e0;
                     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
                     margin: 40px auto;
-                    font-size: 14px; /* 调整正文字体大小 */
-                    line-height: 1.6; /* 增加行间距提高可读性 */">
+                    font-size: 14px; /* 正文字体大小 */
+                    line-height: 1.6; /* 行间距提高可读性 */">
                 
                 {{ content | markdownify }}
 
             </div>  
 
             <!-- Navigation Buttons -->
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                navigation-buttons"
+            <div class="navigation-buttons"
                 style="
+                    width: 90%; /* 按钮区域与正文一致 */
                     display: flex;
                     justify-content: space-between;
-                    gap: 20px;
-                    margin-top: 20px;">
+                    gap: 10px;
+                    margin: 20px auto;">
                 
                 {% if page.previous.url %}
                 <a href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}" 
@@ -88,7 +84,7 @@ layout: default
                     style="
                         flex: 1;
                         text-align: center;
-                        padding: 10px 20px;
+                        padding: 10px;
                         background-color: #e9ecef;
                         border: 1px solid #dcdcdc;
                         border-radius: 8px;
@@ -108,7 +104,7 @@ layout: default
                     style="
                         flex: 1;
                         text-align: center;
-                        padding: 10px 20px;
+                        padding: 10px;
                         background-color: #e9ecef;
                         border: 1px solid #dcdcdc;
                         border-radius: 8px;
@@ -128,57 +124,56 @@ layout: default
     </div>
 </article>
 
-    <!-- Side Catalog Container -->
-        {% if page.catalog %}
-            <div class="
-                col-lg-2 col-lg-offset-0
-                visible-lg-block
-                sidebar-container
-                catalog-container">
-                <div class="side-catalog">
-                    <hr class="hidden-sm hidden-xs">
-                    <h5>
-                        <a class="catalog-toggle" href="#">CATALOG</a>
-                    </h5>
-                    <ul class="catalog-body"></ul>
-                </div>
+<!-- Side Catalog Container -->
+    {% if page.catalog %}
+        <div class="
+            col-lg-2 col-lg-offset-0
+            visible-lg-block
+            sidebar-container
+            catalog-container">
+            <div class="side-catalog">
+                <hr class="hidden-sm hidden-xs">
+                <h5>
+                    <a class="catalog-toggle" href="#">CATALOG</a>
+                </h5>
+                <ul class="catalog-body"></ul>
             </div>
-        {% endif %}
+        </div>
+    {% endif %}
 
-    <!-- Sidebar Container -->
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                sidebar-container">
+<!-- Sidebar Container -->
+        <div class="
+            col-lg-8 col-lg-offset-2
+            col-md-10 col-md-offset-1
+            sidebar-container">
 
-                <!-- Featured Tags -->
-                {% if site.featured-tags %}
-                <section>
-                    <hr class="hidden-sm hidden-xs">
-                    <h5><a href="/1-tags/">FEATURED TAGS</a></h5>
-                    <div class="tags">
-                        {% for tag in site.tags %}
-                            {% if tag[1].size > {{site.featured-condition-size}} %}
-                                <a href="/1-tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
-                                    {{ tag[0] }}
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </section>
-                {% endif %}
-
-                <!-- Friends Blog -->
-                {% if site.friends %}
-                <hr>
-                <h5>FRIENDS</h5>
-                <ul class="list-inline">
-                    {% for friend in site.friends %}
-                        <li><a href="{{friend.href}}">{{friend.title}}</a></li>
+            <!-- Featured Tags -->
+            {% if site.featured-tags %}
+            <section>
+                <hr class="hidden-sm hidden-xs">
+                <h5><a href="/1-tags/">FEATURED TAGS</a></h5>
+                <div class="tags">
+                    {% for tag in site.tags %}
+                        {% if tag[1].size > {{site.featured-condition-size}} %}
+                            <a href="/1-tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
+                                {{ tag[0] }}
+                            </a>
+                        {% endif %}
                     {% endfor %}
-                </ul>
-                {% endif %}
-            </div>
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Friends Blog -->
+            {% if site.friends %}
+            <hr>
+            <h5>FRIENDS</h5>
+            <ul class="list-inline">
+                {% for friend in site.friends %}
+                    <li><a href="{{friend.href}}">{{friend.title}}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
     </div>
 </article>
@@ -217,12 +212,6 @@ layout: default
 <!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
 <script>
     async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
-        // BY Fix:去除标题前的‘#’ issues:<https://github.com/qiubaiying/qiubaiying.github.io/issues/137>
-        // anchors.options = {
-        //   visible: 'always',
-        //   placement: 'right',
-        //   icon: '#'
-        // };
         anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
     })
 </script>
