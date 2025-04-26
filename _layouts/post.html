@@ -77,9 +77,9 @@ layout: default
             </div>  
 
 <!-- 分享功能 -->
-<div id="share-container" style="text-align: center; margin-top: 20px;">
+<div id="share-container" style="text-align: left; margin-top: 20px;">
   <button id="share-btn" style="
-      padding: 10px 15px;
+      padding: 8px 12px;
       background-color: #007BFF;
       color: white;
       border: none;
@@ -92,9 +92,9 @@ layout: default
 </div>
 
 <!-- 截图功能 -->
-<div id="screenshot-container" style="text-align: center; margin-top: 20px;">
+<div id="screenshot-container" style="text-align: left; margin-top: 20px;">
   <button id="screenshot-btn" style="
-      padding: 10px 15px;
+      padding: 8px 12px;
       background-color: #4CAF50;
       color: white;
       border: none;
@@ -113,7 +113,7 @@ layout: default
   document.getElementById('share-btn').addEventListener('click', function () {
       const title = document.querySelector('h1').innerText || '文章标题'; // 获取文章标题
       const url = window.location.href; // 获取当前文章的链接
-      const shareText = `【本文章 ${title}】+ ${url}，欢迎前来阅读！`;
+      const shareText = `【${title}】${url}，欢迎前来阅读！`;
 
       // 复制内容到剪贴板
       navigator.clipboard.writeText(shareText).then(() => {
