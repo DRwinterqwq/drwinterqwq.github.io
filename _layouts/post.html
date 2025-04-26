@@ -57,6 +57,7 @@ function showPopupMessage(message) {
     popup.classList.add('hidden');
   }, 3000); // 3秒后隐藏
 }
+</script>
 
 <!-- Post Header -->
 <style type="text/css">
@@ -130,10 +131,10 @@ function showPopupMessage(message) {
 
 <!-- 分享功能 -->
 <div id="share-container" style="text-align: left; margin-top: 20px;">
-  <button id="share-btn" style="
+  <button id="share-btn-1" style="
       padding: 8px 12px;
       background-color: #ffffff;
-      color: white;
+      color: black;
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -145,10 +146,10 @@ function showPopupMessage(message) {
 
 <!-- 截图功能 -->
 <div id="screenshot-container" style="text-align: left; margin-top: 20px;">
-  <button id="share-btn" style="
+  <button id="screenshot-btn" style="
       padding: 8px 12px;
       background-color: #ffffff;
-      color: white;
+      color: black;
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -158,8 +159,8 @@ function showPopupMessage(message) {
   </button>
 </div>
 
-<!-- 分享脚本部分 -->
-document.getElementById('share-container').addEventListener('click', function () {
+<script>
+document.getElementById('share-btn-1').addEventListener('click', function () {
   const title = document.querySelector('h1').innerText || '文章标题'; // 获取文章标题
   const url = window.location.href; // 获取当前文章的链接
   const shareText = `【${title}】${url}，欢迎前来阅读！`;
@@ -173,8 +174,7 @@ document.getElementById('share-container').addEventListener('click', function ()
   });
 });
 
-<!-- 截图脚本部分 -->
-document.getElementById('screenshot-container').addEventListener('click', function () {
+document.getElementById('screenshot-btn').addEventListener('click', function () {
   const page = document.documentElement; // 获取整个网页
   html2canvas(page, {
     scale: window.devicePixelRatio, // 使用设备分辨率
@@ -190,6 +190,7 @@ document.getElementById('screenshot-container').addEventListener('click', functi
     showPopupMessage('截图失败，请重试。'); // 弹出提示
   });
 });
+</script>
 
             <!-- Navigation Buttons -->
             <div class="navigation-buttons"
