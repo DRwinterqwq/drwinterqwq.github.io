@@ -42,6 +42,14 @@ layout: default
     </div>
 </header>
 
+<!-- 计算并显示字数 -->
+<div class="word-count">
+  {% capture content_without_punctuation %}
+    {{ content | replace: ',', '' | replace: '.', '' | replace: '!', '' | replace: '?', '' | replace: '，', '' | replace: '。', '' | replace: '！', '' | replace: '？', '' | replace: ':', '' | replace: ';', '' | replace: '：', '' | replace: '；', '' | replace: '、', '' | replace: '“', '' | replace: '”', '' | replace: '‘', '' | replace: '’', '' | replace: '(', '' | replace: ')', '' | replace: '（', '' | replace: '）', '' }}
+  {% endcapture %}
+  <p>全文总字数（不含标点符号）：{{ content_without_punctuation | strip_html | size }}</p>
+</div>
+
 <!-- Post Content -->
 <article>
     <div class="container">
