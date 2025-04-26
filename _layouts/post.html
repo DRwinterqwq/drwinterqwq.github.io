@@ -14,27 +14,29 @@ layout: default
 <style>
 .popup {
   position: fixed;
-  top: 50%;
+  top: -100px; /* 初始位置在屏幕外顶部 */
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   background-color: #fff; 
   color: #333;
   padding: 15px 20px;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  opacity: 0; /* 初始透明度 */
+  visibility: hidden; /* 初始不可见 */
+  transition: top 0.5s ease, opacity 0.5s ease; /* 动画效果 */
   z-index: 1000;
 }
 
 .popup.show {
-  opacity: 1;
+  top: 100px; /* 弹出框的目标位置 */
+  opacity: 1; /* 显示 */
   visibility: visible;
 }
 
 .popup.hidden {
-  opacity: 0;
+  top: -100px; /* 隐藏时回到顶部 */
+  opacity: 0; /* 隐藏 */
   visibility: hidden;
 }
 </style>
@@ -129,33 +131,33 @@ function showPopupMessage(message) {
 
             </div>  
 
-<!-- 分享功能 -->
-<div id="share-container" style="text-align: left; margin-top: 20px;">
+<!-- 分享和截图按钮 -->
+<div id="action-buttons" style="
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;">
+  <!-- 分享按钮 -->
   <button id="share-btn-1" style="
       padding: 8px 12px;
       background-color: #ffffff;
-      color: black;
+      color: #333;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  ">
-      分享
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+    分享
   </button>
-</div>
 
-<!-- 截图功能 -->
-<div id="screenshot-container" style="text-align: left; margin-top: 20px;">
+  <!-- 截图按钮 -->
   <button id="screenshot-btn" style="
       padding: 8px 12px;
       background-color: #ffffff;
-      color: black;
+      color: #333;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  ">
-      截图
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+    截图
   </button>
 </div>
 
@@ -192,61 +194,51 @@ document.getElementById('screenshot-btn').addEventListener('click', function () 
 });
 </script>
 
-            <!-- Navigation Buttons -->
-            <div class="navigation-buttons"
-                style="
-                    width: 90%;
-                    max-width: 720px;
-                    display: flex;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
-                    gap: 10px;
-                    margin: 20px auto;">
-                
-                {% if page.previous.url %}
-                <a href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}" 
-                    class="btn btn-navigation previous"
-                    style="
-                        flex: 1 1 calc(50% - 10px);
-                        text-align: center;
-                        padding: 10px;
-                        background-color: #ffffff;
-                        border: 1px solid #e0e0e0;
-                        border-radius: 8px;
-                        text-decoration: none;
-                        color: #333;
-                        font-size: 14px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;">
-                    Previous<br>
-                    <span>{{ page.previous.title }}</span>
-                </a>
-                {% endif %}
+<!-- 导航按钮 -->
+<div class="navigation-buttons"
+    style="
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 20px auto;
+        width: 90%;
+        max-width: 720px;">
+        
+    {% if page.previous.url %}
+    <a href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}" 
+        class="btn btn-navigation previous"
+        style="
+            flex: 1 1 calc(50% - 10px);
+            text-align: center;
+            padding: 10px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;">
+        Previous<br>
+        <span>{{ page.previous.title }}</span>
+    </a>
+    {% endif %}
 
-                {% if page.next.url %}
-                <a href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}" 
-                    class="btn btn-navigation next"
-                    style="
-                        flex: 1 1 calc(50% - 10px);
-                        text-align: center;
-                        padding: 10px;
-                        background-color: #ffffff;
-                        border: 1px solid #e0e0e0;
-                        border-radius: 8px;
-                        text-decoration: none;
-                        color: #333;
-                        font-size: 14px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;">
-                    Next<br>
-                    <span>{{ page.next.title }}</span>
-                </a>
-                {% endif %}
-
-            </div>
-
+    {% if page.next.url %}
+    <a href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}" 
+        class="btn btn-navigation next"
+        style="
+            flex: 1 1 calc(50% - 10px);
+            text-align: center;
+            padding: 10px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;">
+        Next<br>
+        <span>{{ page.next.title }}</span>
+    </a>
+    {% endif %}
+</div>
         </div>
     </div>
 </article>
