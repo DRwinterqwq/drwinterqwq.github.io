@@ -25,7 +25,7 @@ Summer Pockets REFLECTION BLUE - 2020-6-26
 点击下方以查看内容简介↓
 
 <details>
-<summary> **内容简介** </summary>
+<summary> →内容简介← </summary>
 
 <div markdown="1">
 
