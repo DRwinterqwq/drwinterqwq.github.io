@@ -45,7 +45,7 @@ layout: default
 <!-- 计算并显示字数及预计阅读时间 -->
 <div class="word-count" style="text-align: center; margin-top: 20px; font-size: 16px; color: #555;">
   {% capture content_filtered %}
-    {{ content | strip_html | replace: ' ', '' | replace: '\n', '' | regex_replace: '[^a-zA-Z\u4e00-\u9fa5]', '' }}
+    {{ content | strip_html | replace: ' ', '' | replace: '\n', '' | regex_replace: '[^a-zA-Z0-9\u4e00-\u9fa5]', '' }}
   {% endcapture %}
   {% assign word_count = content_filtered | size %}
   <p style="background: #f9f9f9; display: inline-block; padding: 10px 20px; border-radius: 8px; border: 1px solid #ddd;">
