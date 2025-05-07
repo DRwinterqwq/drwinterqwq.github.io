@@ -45,11 +45,18 @@ layout: default
 <!-- 计算并显示字数及预计阅读时间 -->
 <div class="word-count" style="text-align: center; margin-top: 20px; font-size: 16px; color: #555;">
   {% capture content_filtered %}
-    {{ content | strip_html | replace: ' ', '' | replace: '\n', '' | regex_replace: '[^a-zA-Z0-9\u4e00-\u9fa5]', '' }}
+    {{ content 
+      | strip_html                                    /* 移除 HTML 标签 */
+      | regex_replace: '!\\[([^\\]]*)\\]\\([^\\)]*\\)', '\\1' /* 提取图片描述部分 */
+      | regex_replace: '\\[([^\\]]*)\\]\\([^\\)]*\\)', '\\1'  /* 提取链接描述部分 */
+      | replace: ' ', ''                             /* 移除空格 */
+      | replace: '\n', ''                            /* 移除换行符 */
+      | regex_replace: '[^a-zA-Z0-9\u4e00-\u9fa5]', '' /* 仅保留中英文和数字 */
+    }}
   {% endcapture %}
   {% assign word_count = content_filtered | size %}
   <p style="background: #f9f9f9; display: inline-block; padding: 10px 20px; border-radius: 8px; border: 1px solid #ddd;">
-    全文总字数（不统计符号）：<strong style="color: #333;">{{ word_count }}</strong><br>
+    全文总字数（统计中英文、数字及描述部分）：<strong style="color: #333;">{{ word_count }}</strong><br>
     预计阅读时间：<strong style="color: #333;">{{ word_count | divided_by: 700.0 | round: 1 }} min</strong>
   </p>
 </div>
