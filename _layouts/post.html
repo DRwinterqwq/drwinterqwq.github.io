@@ -52,7 +52,7 @@ layout: default
       | replace: '\n', ''                            /* 移除换行符 */
       | replace: '\r', ''                            /* 移除回车符 */
       | replace: ' ', ''                             /* 移除空格 */
-      | regex_replace: '[^a-zA-Z0-9\u4e00-\u9fa5]', '' /* 保留中英文和数字 */
+      | regex_replace: '[^a-zA-Z0-9\u4e00-\u9fa5\u3040-\u309F\u30A0-\u30FF\uFF00-\uFFEF]', '' /* 保留中英文、数字、中文、平假名、片假名、全角字符 */
     }}
   {% endcapture %}
   {% assign word_count = content_filtered | size %}
