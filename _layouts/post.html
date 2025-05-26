@@ -86,8 +86,7 @@ layout: default
 
         // Zoom控制变量
         let scale = 1;
-        let originX = 0;
-        let originY = 0;
+        let initialDistance = 0;
 
         // 为每张图片添加点击事件
         images.forEach(image => {
@@ -112,14 +111,41 @@ layout: default
             const zoomSpeed = 0.1; // 缩放速度
             scale += event.deltaY < 0 ? zoomSpeed : -zoomSpeed; // 根据滚轮方向调整缩放
             scale = Math.min(Math.max(0.5, scale), 3); // 限制缩放比例在 0.5 到 3 之间
-
-            // 获取鼠标位置作为缩放中心
-            const rect = modalImage.getBoundingClientRect();
-            originX = (event.clientX - rect.left) / rect.width;
-            originY = (event.clientY - rect.top) / rect.height;
-
-            modalImage.style.transformOrigin = `${originX * 100}% ${originY * 100}%`;
             modalImage.style.transform = `scale(${scale})`;
+        });
+
+        // 处理双指缩放
+        modalImage.addEventListener("touchstart", (event) => {
+            if (event.touches.length === 2) {
+                // 计算双指之间的初始距离
+                const touch1 = event.touches[0];
+                const touch2 = event.touches[1];
+                initialDistance = Math.hypot(
+                    touch2.pageX - touch1.pageX,
+                    touch2.pageY - touch1.pageY
+                );
+            }
+        });
+
+        modalImage.addEventListener("touchmove", (event) => {
+            if (event.touches.length === 2) {
+                event.preventDefault(); // 禁止默认滚动行为
+                const touch1 = event.touches[0];
+                const touch2 = event.touches[1];
+                const currentDistance = Math.hypot(
+                    touch2.pageX - touch1.pageX,
+                    touch2.pageY - touch1.pageY
+                );
+
+                // 根据距离变化调整缩放比例
+                const zoomSpeed = 0.005; // 缩放速度
+                scale += (currentDistance - initialDistance) * zoomSpeed;
+                scale = Math.min(Math.max(0.5, scale), 3); // 限制缩放比例在 0.5 到 3 之间
+                modalImage.style.transform = `scale(${scale})`;
+
+                // 更新初始距离
+                initialDistance = currentDistance;
+            }
         });
     });
 </script>
