@@ -6,6 +6,9 @@ layout: default
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
 <!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
 
+<!-- 禁止页面双指缩放 -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header {
@@ -69,6 +72,7 @@ layout: default
         max-height: 90%;
         border: 2px solid white;
         border-radius: 8px;
+        transform-origin: center center;
     }
 </style>
 
@@ -80,19 +84,42 @@ layout: default
         const modal = document.getElementById("imageModal");
         const modalImage = document.getElementById("modalImage");
 
+        // Zoom控制变量
+        let scale = 1;
+        let originX = 0;
+        let originY = 0;
+
         // 为每张图片添加点击事件
         images.forEach(image => {
             image.addEventListener("click", () => {
                 modal.style.display = "flex"; // 显示弹出层
                 modalImage.src = image.src; // 将弹出层的图片源设置为点击的图片
+                scale = 1; // 重置缩放比例
+                modalImage.style.transform = `scale(${scale})`; // 重置缩放
             });
         });
 
-        // 点击弹出层关闭
+        // 点击空白区域关闭弹出层
         modal.addEventListener("click", (event) => {
             if (event.target === modal) { // 仅在点击空白区域时关闭
                 modal.style.display = "none";
             }
+        });
+
+        // 鼠标滚轮缩放图片
+        modalImage.addEventListener("wheel", (event) => {
+            event.preventDefault();
+            const zoomSpeed = 0.1; // 缩放速度
+            scale += event.deltaY < 0 ? zoomSpeed : -zoomSpeed; // 根据滚轮方向调整缩放
+            scale = Math.min(Math.max(0.5, scale), 3); // 限制缩放比例在 0.5 到 3 之间
+
+            // 获取鼠标位置作为缩放中心
+            const rect = modalImage.getBoundingClientRect();
+            originX = (event.clientX - rect.left) / rect.width;
+            originY = (event.clientY - rect.top) / rect.height;
+
+            modalImage.style.transformOrigin = `${originX * 100}% ${originY * 100}%`;
+            modalImage.style.transform = `scale(${scale})`;
         });
     });
 </script>
