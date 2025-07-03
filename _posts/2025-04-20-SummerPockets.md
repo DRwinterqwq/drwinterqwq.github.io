@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      【推荐】Summer Pockets (REFLECTION BLUE)
+title:      【推荐】Summer Pockets
 subtitle:   “在一个小岛的「救赎」之旅”
 date:       2025-04-20
 author:     DRwinterovo
@@ -9,18 +9,24 @@ header-mask: 0.3
 catalog: false
 tags:
     - Gal评测(推荐)
+    - 全年龄
 ---
 
 # 基本信息
 
-Gal名称：Summer Pockets(REFLECTION BLUE)
+Gal名称：Summer Pockets
 
 发行商：key
 
-发行时间：Summer Pockets - 2018-6-29
-Summer Pockets REFLECTION BLUE - 2020-6-26
+发行时间：
+
+Summer Pockets - 2018-06-29
+
+Summer Pockets REFLECTION BLUE - 2020-06-26
 
 分类：剧情作
+
+分级：全年龄
 
 点击下方以查看内容简介↓
 
@@ -34,6 +40,20 @@ Summer Pockets REFLECTION BLUE - 2020-6-26
 </div>
 
 </details>
+
+# 下载页面
+
+## Summer Pockets
+
+[点击进入官网](http://key.visualarts.gr.jp/summer/)
+
+[点击进入TouchGal页面](https://www.touchgal.us/c2e4fe52)
+
+## REFLECTION BLUE
+
+[点击进入官网](https://key.visualarts.gr.jp/summer_rb/)
+
+[点击进入TouchGal页面](https://www.touchgal.us/57cfaca9)
 
 # 评价
 剧情：10/10 画风：8/10 游玩体验：9/10
