@@ -31,11 +31,6 @@ layout: default
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-heading">
-                    <div class="tags">
-                        {% for tag in page.tags %}
-                        <a class="tag" href="{{ site.baseurl }}/1-tags/#{{ tag }}" title="{{ tag }}">{{ tag }}</a>
-                        {% endfor %}
-                    </div>
                     <h1>{{ page.title }}</h1>
                     <h2 class="subheading">{{ page.subtitle }}</h2>
                     <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }}</span>
@@ -230,6 +225,43 @@ layout: default
         });
     });
 </script>
+
+<!-- 标签样式 -->
+<style>
+  .tag {
+    display: inline-block;
+    margin: 0 5px 5px 0;
+    padding: 3px 10px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 13px;
+    text-decoration: none;
+    background: #888; /* 默认灰色 */
+  }
+  .tag-r18 { background: #e74c3c !important; }
+  .tag-allage { background: #27ae60 !important; }
+</style>
+
+<!-- 标签显示模块 -->
+<div class="tags" style="margin-bottom:15px;">
+  {% for tag in page.tags %}
+    {% assign color = '' %}
+    {% assign tag_name = tag %}
+    {% if tag contains '{#' and tag contains '}' %}
+      {% assign color = tag | split: '{#' | last | split: '}' | first | prepend: '#' %}
+      {% assign tag_name = tag | split: '{#' | first | strip %}
+    {% endif %}
+    {% if tag_name == 'R18' %}
+      <a class="tag tag-r18" href="{{ site.baseurl }}/1-tags/#R18" title="R18">R18</a>
+    {% elsif tag_name == '全年龄' %}
+      <a class="tag tag-allage" href="{{ site.baseurl }}/1-tags/#全年龄" title="全年龄">全年龄</a>
+    {% elsif color != '' %}
+      <a class="tag" style="background:{{ color }};" href="{{ site.baseurl }}/1-tags/#{{ tag_name }}" title="{{ tag_name }}">{{ tag_name }}</a>
+    {% else %}
+      <a class="tag" style="background:#888;" href="{{ site.baseurl }}/1-tags/#{{ tag_name }}" title="{{ tag_name }}">{{ tag_name }}</a>
+    {% endif %}
+  {% endfor %}
+</div>
 
 <!-- 计算并显示字数及预计阅读时间 -->
 <div class="word-count" style="text-align: center; margin-top: 20px; font-size: 16px; color: #555;">
