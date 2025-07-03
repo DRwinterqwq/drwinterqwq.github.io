@@ -392,17 +392,6 @@ layout: default
     col-md-10 col-md-offset-1
     sidebar-container">
 
-<!-- Featured Tags -->
-<div class="featured-tags">
-  {% for tag in site.tags %}
-    {% if tag[1].size > {{site.featured-condition-size}} %}
-      <a class="tag" href="/1-tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
-        {{ tag[0] }}
-      </a>
-    {% endif %}
-  {% endfor %}
-</div>
-
     <!-- Friends Blog -->
     {% if site.friends %}
     <hr>
