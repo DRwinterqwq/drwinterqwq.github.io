@@ -11,7 +11,6 @@ layout: default
         position: relative;
         background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}');
     }
-
     {% if page.header-mask %}
     header.intro-header .header-mask {
         width: 100%;
@@ -56,8 +55,6 @@ layout: default
         justify-content: center;
         align-items: center;
     }
-
-    /* 弹出层中的图片 */
     .image-modal img {
         max-width: 90%;
         max-height: 90%;
@@ -65,17 +62,47 @@ layout: default
         border-radius: 8px;
         transform-origin: center center;
     }
+    /* 前置标签样式（文章前） */
+    .tags {
+        text-align: center;
+        margin-bottom: 4px;
+    }
+    .tag {
+        display: inline-block;
+        margin: 0 6px 4px 0;
+        padding: 3px 12px;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 22px; /* 更大 */
+        text-decoration: none;
+        background: #888; /* 默认灰色 */
+    }
+    .tag-r18 { background: #e74c3c !important; }
+    .tag-allage { background: #27ae60 !important; }
+    /* 侧边栏标签样式（文章后） */
+    .tags-sidebar {
+        text-align: left !important;
+        margin-bottom: 4px;
+    }
+    .tags-sidebar a {
+        display: inline-block;
+        margin: 0 6px 4px 0;
+        padding: 3px 12px;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 13px;
+        background: #888;
+        text-decoration: none;
+    }
 </style>
 
 <!-- 脚本 -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // 获取所有图片和弹出层元素
-        const images = document.querySelectorAll(".post-container img"); // 选择文章内容中的所有图片
+        const images = document.querySelectorAll(".post-container img");
         const modal = document.getElementById("imageModal");
         const modalImage = document.getElementById("modalImage");
-
-        // Zoom和拖动控制变量
         let scale = 1;
         let initialDistance = 0;
         let isDragging = false;
@@ -83,59 +110,40 @@ layout: default
         let startY = 0;
         let offsetX = 0;
         let offsetY = 0;
-
-        // 图片的分辨率
         let originalWidth = 0;
         let originalHeight = 0;
-
-        // 为每张图片添加点击事件
         images.forEach(image => {
             image.addEventListener("click", () => {
-                modal.style.display = "flex"; // 显示弹出层
-                modalImage.src = image.src; // 将弹出层的图片源设置为点击的图片
-                
-                // 获取图片的原始分辨率
+                modal.style.display = "flex";
+                modalImage.src = image.src;
                 const img = new Image();
                 img.src = image.src;
                 img.onload = () => {
                     originalWidth = img.naturalWidth;
                     originalHeight = img.naturalHeight;
                 };
-
-                // 重置缩放比例和位置
                 scale = 1;
                 offsetX = 0;
                 offsetY = 0;
                 modalImage.style.transform = `scale(${scale}) translate(0px, 0px)`;
             });
         });
-
-        // 点击空白区域关闭弹出层
         modal.addEventListener("click", (event) => {
-            if (event.target === modal) { // 仅在点击空白区域时关闭
+            if (event.target === modal) {
                 modal.style.display = "none";
             }
         });
-
-        // 鼠标滚轮缩放图片
         modalImage.addEventListener("wheel", (event) => {
             event.preventDefault();
-            const zoomSpeed = 0.1; // 缩放速度
-
-            // 动态限制缩放比例
+            const zoomSpeed = 0.1;
             const maxScale = Math.max(originalWidth / modalImage.offsetWidth, originalHeight / modalImage.offsetHeight);
             const minScale = 1;
-
-            scale += event.deltaY < 0 ? zoomSpeed : -zoomSpeed; // 根据滚轮方向调整缩放
-            scale = Math.min(Math.max(minScale, scale), maxScale); // 限制缩放比例
-
+            scale += event.deltaY < 0 ? zoomSpeed : -zoomSpeed;
+            scale = Math.min(Math.max(minScale, scale), maxScale);
             modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
         });
-
-        // 处理双指缩放
         modalImage.addEventListener("touchstart", (event) => {
             if (event.touches.length === 2) {
-                // 计算双指之间的初始距离
                 const touch1 = event.touches[0];
                 const touch2 = event.touches[1];
                 initialDistance = Math.hypot(
@@ -144,40 +152,29 @@ layout: default
                 );
             }
         });
-
         modalImage.addEventListener("touchmove", (event) => {
             if (event.touches.length === 2) {
-                event.preventDefault(); // 禁止默认滚动行为
+                event.preventDefault();
                 const touch1 = event.touches[0];
                 const touch2 = event.touches[1];
                 const currentDistance = Math.hypot(
                     touch2.pageX - touch1.pageX,
                     touch2.pageY - touch1.pageY
                 );
-
-                // 动态限制缩放比例
                 const maxScale = Math.max(originalWidth / modalImage.offsetWidth, originalHeight / modalImage.offsetHeight);
                 const minScale = 1;
-
-                // 根据距离变化调整缩放比例
-                const zoomSpeed = 0.005; // 缩放速度
+                const zoomSpeed = 0.005;
                 scale += (currentDistance - initialDistance) * zoomSpeed;
-                scale = Math.min(Math.max(minScale, scale), maxScale); // 限制缩放比例
-
+                scale = Math.min(Math.max(minScale, scale), maxScale);
                 modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
-
-                // 更新初始距离
                 initialDistance = currentDistance;
             }
         });
-
-        // 鼠标拖动图片
         modalImage.addEventListener("mousedown", (event) => {
             isDragging = true;
             startX = event.clientX;
             startY = event.clientY;
         });
-
         document.addEventListener("mousemove", (event) => {
             if (isDragging) {
                 const dx = event.clientX - startX;
@@ -189,12 +186,9 @@ layout: default
                 startY = event.clientY;
             }
         });
-
         document.addEventListener("mouseup", () => {
             isDragging = false;
         });
-
-        // 手指拖动图片
         modalImage.addEventListener("touchstart", (event) => {
             if (event.touches.length === 1) {
                 isDragging = true;
@@ -202,7 +196,6 @@ layout: default
                 startY = event.touches[0].clientY;
             }
         });
-
         modalImage.addEventListener("touchmove", (event) => {
             if (isDragging && event.touches.length === 1) {
                 event.preventDefault();
@@ -215,7 +208,6 @@ layout: default
                 startY = event.touches[0].clientY;
             }
         });
-
         modalImage.addEventListener("touchend", () => {
             isDragging = false;
         });
@@ -226,13 +218,13 @@ layout: default
 <div class="word-count" style="text-align: center; margin-top: 20px; font-size: 16px; color: #555;">
   {% capture content_filtered %}
     {{ content 
-      | strip_html                                    /* 移除 HTML 标签 */
-      | regex_replace: '!\\[([^\\]]*)\\]\\([^\\)]*\\)', '\\1' /* 提取 Markdown 图片描述部分 */
-      | regex_replace: '\\[([^\\]]*)\\]\\([^\\)]*\\)', '\\1'  /* 提取 Markdown 链接描述部分 */
-      | replace: '\n', ''                            /* 移除换行符 */
-      | replace: '\r', ''                            /* 移除回车符 */
-      | replace: ' ', ''                             /* 移除空格 */
-      | regex_replace: '[^a-zA-Z0-9\u4e00-\u9fa5\u3040-\u309F\u30A0-\u30FF\uFF00-\uFFEF]', '' /* 保留中英文、数字、中文、平假名、片假名、全角字符 */
+      | strip_html
+      | regex_replace: '!\\[([^\\]]*)\\]\\([^\\)]*\\)', '\\1'
+      | regex_replace: '\\[([^\\]]*)\\]\\([^\\)]*\\)', '\\1'
+      | replace: '\n', ''
+      | replace: '\r', ''
+      | replace: ' ', ''
+      | regex_replace: '[^a-zA-Z0-9\u4e00-\u9fa5\u3040-\u309F\u30A0-\u30FF\uFF00-\uFFEF]', ''
     }}
   {% endcapture %}
   {% assign word_count = content_filtered | size %}
@@ -242,27 +234,7 @@ layout: default
   </p>
 </div>
 
-<!-- 标签样式 -->
-<style>
-  .tags {
-    text-align: center;
-    margin-bottom: 4px;
-  }
-  .tag {
-    display: inline-block;
-    margin: 0 6px 4px 0;
-    padding: 3px 12px;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 13px;
-    text-decoration: none;
-    background: #888; /* 默认灰色 */
-  }
-  .tag-r18 { background: #e74c3c !important; }
-  .tag-allage { background: #27ae60 !important; }
-</style>
-
-<!-- 标签显示模块 -->
+<!-- 标签显示模块（文章前） -->
 <div class="tags">
   {% for tag in page.tags %}
     {% assign color = '' %}
@@ -393,7 +365,7 @@ layout: default
     <section>
         <hr class="hidden-sm hidden-xs">
         <h5><a href="/1-tags/">FEATURED TAGS</a></h5>
-        <div class="tags">
+        <div class="tags-sidebar">
             {% for tag in site.tags %}
                 {% if tag[1].size > {{site.featured-condition-size}} %}
                     <a href="/1-tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
