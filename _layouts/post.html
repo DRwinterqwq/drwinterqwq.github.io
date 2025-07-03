@@ -228,22 +228,28 @@ layout: default
 
 <!-- 标签样式 -->
 <style>
+  .tags {
+    text-align: center;
+    margin-bottom: 10px;
+  }
   .tag {
     display: inline-block;
-    margin: 0 5px 5px 0;
-    padding: 3px 10px;
+    margin: 0 6px 6px 0;
+    padding: 3px 12px;
     border-radius: 4px;
     color: #fff;
     font-size: 13px;
     text-decoration: none;
     background: #888; /* 默认灰色 */
+    transition: filter .1s;
   }
   .tag-r18 { background: #e74c3c !important; }
   .tag-allage { background: #27ae60 !important; }
+  .tag:hover { filter: brightness(1.15); }
 </style>
 
-<!-- 标签显示模块 -->
-<div class="tags" style="margin-bottom:15px;">
+<!-- 标签显示 -->
+<div class="tags">
   {% for tag in page.tags %}
     {% assign color = '' %}
     {% assign tag_name = tag %}
