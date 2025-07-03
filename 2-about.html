@@ -5,42 +5,6 @@ description: "关于我"
 header-img: "img/about-bg.jpg"
 ---
 
-.header-mask {
-    position: absolute;
-    left: 0; top: 0; right: 0; bottom: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.3);
-    z-index: 1;
-    pointer-events: none;
-}
-.intro-header {
-    position: relative;
-    overflow: hidden;
-}
-.intro-header .container,
-.intro-header .row,
-.intro-header .site-heading {
-    position: relative;
-    z-index: 2;
-}
-</style>
-
-<!-- Page Header -->
-<header class="intro-header" style="background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}');">
-    <div class="header-mask"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading" id="tag-heading">
-                    <h1>{{ page.title }}</h1>
-                    <span class="subheading">{{ page.description }}</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
 
     <p>你好，本人为<strong>冬日winterovo</strong>，现在主攻于（？）Galgame，<del>副业</del>也游玩DLRS。</p>
 
