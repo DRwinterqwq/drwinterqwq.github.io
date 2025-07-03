@@ -19,6 +19,22 @@ header.intro-header .header-mask {
     background: rgba(0,0,0, {{ site.header-mask }});
 }
 {% endif %}
+
+.tag-r18 {
+    background: #e74c3c !important; /* 红色 */
+    color: #fff !important;
+}
+.tag-allage {
+    background: #27ae60 !important; /* 绿色 */
+    color: #fff !important;
+}
+.special-tag {
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-right: 5px;
+    display: inline-block;
+}
 </style>
 
 <!-- Page Header -->
@@ -42,9 +58,17 @@ header.intro-header .header-mask {
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <!-- 标签云 -->
 			<div id='tag_cloud' class="tags">
-				{% for tag in site.tags %}
-				<a href="#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">{{ tag[0] }}</a>
-				{% endfor %}
+                {% assign special_tags = "R18,全年龄" | split: "," %}
+                {% for special in special_tags %}
+                    {% if site.tags[special] %}
+                        <a href="#{{ special }}" title="{{ special }}" rel="{{ site.tags[special].size }}" class="special-tag {% if special == 'R18' %}tag-r18{% elsif special == '全年龄' %}tag-allage{% endif %}">{{ special }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% for tag in site.tags %}
+                    {% unless special_tags contains tag[0] %}
+                        <a href="#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">{{ tag[0] }}</a>
+                    {% endunless %}
+                {% endfor %}
 			</div>
 
             <!-- 标签列表 -->
@@ -54,10 +78,6 @@ header.intro-header .header-mask {
                     <span class="tag-text">{{ tag[0] }}</span>
                 </span>
 				{% for post in tag[1] %}
-				  <!-- <li class="listing-item">
-				  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-				  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-				  </li> -->
 				 <div class="post-preview">
 				    <a href="{{ post.url | prepend: site.baseurl }}">
 				        <h2 class="post-title">
@@ -69,7 +89,6 @@ header.intro-header .header-mask {
 				        </h3>
 				        {% endif %}
 				    </a>
-				    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
 				</div>
 				<hr>
 				{% endfor %}
