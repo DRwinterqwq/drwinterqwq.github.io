@@ -24,6 +24,27 @@ a.tag-allage {
     margin-right: 5px;
     display: inline-block;
 }
+
+/* 新增：header 黑色遮罩 */
+.header-mask {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 1;
+    pointer-events: none;
+}
+.intro-header {
+    position: relative;
+    overflow: hidden;
+}
+.intro-header .container,
+.intro-header .row,
+.intro-header .site-heading {
+    position: relative;
+    z-index: 2;
+}
 </style>
 
 <!-- Page Header -->
