@@ -9,6 +9,7 @@ header-mask: 0.3
 catalog: false
 tags:
     - Gal评测(推荐)
+    - R18
 ---
 
 # 基本信息
@@ -21,6 +22,8 @@ Gal名称：AMBITIOUS MISSION
 
 分类：废萌
 
+分级：R18
+
 点击查看内容简介↓
 
 <details>
@@ -32,6 +35,26 @@ Gal名称：AMBITIOUS MISSION
 
 </div>
 </details>
+
+# 下载页面
+
+## 本篇
+
+[点击进入官网](http://sagapla.net/works/ambitious/)
+
+[点击进入TouchGal页面](https://www.touchgal.us/e3de21be)
+
+## FD1
+
+[点击进入官网](https://sagapla.net/works/ambitious_after/)
+
+[点击进入TouchGal页面](https://www.touchgal.us/a5ec4d00)
+
+## FD2
+
+官网链接同FD1
+
+[点击进入TouchGal页面](https://www.touchgal.us/5b4dec0b)
 
 # 评价
 剧情：7/10 画风：8/10 游玩体验：8/10
