@@ -393,21 +393,15 @@ layout: default
     sidebar-container">
 
 <!-- Featured Tags -->
-{% if site.featured-tags %}
-<section>
-  <hr class="hidden-sm hidden-xs">
-  <h5><a href="/1-tags/">FEATURED TAGS</a></h5>
-  <div class="featured-tags">
-    {% for tag in site.tags %}
-      {% if tag[1].size > {{site.featured-condition-size}} %}
-        <a href="/1-tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
-          {{ tag[0] }}
-        </a>
-      {% endif %}
-    {% endfor %}
-  </div>
-</section>
-{% endif %}
+<div class="featured-tags">
+  {% for tag in site.tags %}
+    {% if tag[1].size > {{site.featured-condition-size}} %}
+      <a class="tag" href="/1-tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
+        {{ tag[0] }}
+      </a>
+    {% endif %}
+  {% endfor %}
+</div>
 
     <!-- Friends Blog -->
     {% if site.friends %}
