@@ -248,6 +248,10 @@ layout: default
     text-align: center;
     margin-bottom: 4px;
   }
+  .featured-tags {
+    text-align: left;
+    margin-bottom: 4px;
+  }
   .tag {
     display: inline-block;
     margin: 0 6px 4px 0;
@@ -388,22 +392,22 @@ layout: default
     col-md-10 col-md-offset-1
     sidebar-container">
 
-    <!-- Featured Tags -->
-    {% if site.featured-tags %}
-    <section>
-        <hr class="hidden-sm hidden-xs">
-        <h5><a href="/1-tags/">FEATURED TAGS</a></h5>
-        <div class="tags">
-            {% for tag in site.tags %}
-                {% if tag[1].size > {{site.featured-condition-size}} %}
-                    <a href="/1-tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
-                        {{ tag[0] }}
-                    </a>
-                {% endif %}
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
+<!-- Featured Tags -->
+{% if site.featured-tags %}
+<section>
+  <hr class="hidden-sm hidden-xs">
+  <h5><a href="/1-tags/">FEATURED TAGS</a></h5>
+  <div class="featured-tags">
+    {% for tag in site.tags %}
+      {% if tag[1].size > {{site.featured-condition-size}} %}
+        <a href="/1-tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
+          {{ tag[0] }}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
 
     <!-- Friends Blog -->
     {% if site.friends %}
