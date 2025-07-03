@@ -42,53 +42,9 @@ header.intro-header .header-mask {
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <!-- 标签云 -->
 			<div id='tag_cloud' class="tags">
-				<!-- 专门分类：R18与全年龄 -->
-{% assign special_tags = "R18,全年龄" | split: "," %}
-{% for tag in special_tags %}
-  {% if site.tags[tag] %}
-    <div class="one-tag-list special">
-      <span class="fa fa-tag listing-seperator" id="{{ tag }}">
-        <span class="tag-text">{{ tag }}</span>
-      </span>
-      {% for post in site.tags[tag] %}
-        <div class="post-preview">
-          <a href="{{ post.url | prepend: site.baseurl }}">
-            <h2 class="post-title">{{ post.title }}</h2>
-            {% if post.subtitle %}
-              <h3 class="post-subtitle">{{ post.subtitle }}</h3>
-            {% endif %}
-          </a>
-        </div>
-        <hr>
-      {% endfor %}
-    </div>
-  {% endif %}
-{% endfor %}
-
-<!-- 这里插入分割线 -->
-<hr style="border-top:2px solid #bbb; margin:40px 0;">
-
-<!-- 其余标签 -->
-{% for tag in site.tags %}
-  {% unless tag[0] == "R18" or tag[0] == "全年龄" %}
-    <div class="one-tag-list">
-      <span class="fa fa-tag listing-seperator" id="{{ tag[0] }}">
-        <span class="tag-text">{{ tag[0] }}</span>
-      </span>
-      {% for post in tag[1] %}
-        <div class="post-preview">
-          <a href="{{ post.url | prepend: site.baseurl }}">
-            <h2 class="post-title">{{ post.title }}</h2>
-            {% if post.subtitle %}
-              <h3 class="post-subtitle">{{ post.subtitle }}</h3>
-            {% endif %}
-          </a>
-        </div>
-        <hr>
-      {% endfor %}
-    </div>
-  {% endunless %}
-{% endfor %}
+				{% for tag in site.tags %}
+				<a href="#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">{{ tag[0] }}</a>
+				{% endfor %}
 			</div>
 
             <!-- 标签列表 -->
