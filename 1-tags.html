@@ -60,25 +60,50 @@ a.tag-allage {
                 {% endfor %}
 			</div>
 
-            <!-- 标签列表 -->
-			{% for tag in site.tags %}
-			<div class="one-tag-list">
-			  	<span class="fa fa-tag listing-seperator" id="{{ tag[0] }}">
-                    <span class="tag-text">{{ tag[0] }}</span>
-                </span>
-				{% for post in tag[1] %}
-				 <div class="post-preview">
-				    <a href="{{ post.url | prepend: site.baseurl }}">
-				        <h2 class="post-title">{{ post.title }}</h2>
-				        {% if post.subtitle %}
-				        <h3 class="post-subtitle">{{ post.subtitle }}</h3>
-				        {% endif %}
-				    </a>
-				</div>
-				<hr>
-				{% endfor %}
-			</div>
-			{% endfor %}
+            <!-- 标签列表，顺序与上面一致 -->
+            {% assign special_tags = "R18,全年龄" | split: "," %}
+            {% for special in special_tags %}
+                {% assign tag_posts = site.tags[special] %}
+                {% if tag_posts %}
+                <div class="one-tag-list">
+                    <span class="fa fa-tag listing-seperator" id="{{ special }}">
+                        <span class="tag-text">{{ special }}</span>
+                    </span>
+                    {% for post in tag_posts %}
+                        <div class="post-preview">
+                            <a href="{{ post.url | prepend: site.baseurl }}">
+                                <h2 class="post-title">{{ post.title }}</h2>
+                                {% if post.subtitle %}
+                                <h3 class="post-subtitle">{{ post.subtitle }}</h3>
+                                {% endif %}
+                            </a>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endfor %}
+
+            {% for tag in site.tags %}
+                {% unless special_tags contains tag[0] %}
+                <div class="one-tag-list">
+                    <span class="fa fa-tag listing-seperator" id="{{ tag[0] }}">
+                        <span class="tag-text">{{ tag[0] }}</span>
+                    </span>
+                    {% for post in tag[1] %}
+                        <div class="post-preview">
+                            <a href="{{ post.url | prepend: site.baseurl }}">
+                                <h2 class="post-title">{{ post.title }}</h2>
+                                {% if post.subtitle %}
+                                <h3 class="post-subtitle">{{ post.subtitle }}</h3>
+                                {% endif %}
+                            </a>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                </div>
+                {% endunless %}
+            {% endfor %}
 
 		</div>
 	</div>
