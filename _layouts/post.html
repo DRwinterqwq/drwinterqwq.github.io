@@ -318,99 +318,15 @@ document.addEventListener("DOMContentLoaded", function () {
   {% endfor %}
 </div>
 
-<!-- 正文及行号栏 -->
+<!-- 正文部分：已去除行号，正文居中，左右间隔5px -->
 <article>
   <div class="container">
     <div class="row">
-      <div id="post-content-wrapper">
-        <div class="line-numbers-bar" id="line-numbers-bar"></div>
-        <div class="post-content" id="post-content">
+      <div id="post-content-wrapper" style="max-width: 560px; margin: 36px auto 24px; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #eee; position: relative; padding: 0; overflow: hidden; width: 100%;">
+        <div class="post-content" id="post-content" style="padding: 18px 5px; font-size: 15px; line-height: 1.7; min-width: 0; box-sizing: border-box; word-break: break-word; overflow-wrap: break-word;">
           {{ content | markdownify }}
         </div>
       </div>
-      <style>
-      #post-content-wrapper {
-        max-width: 560px;
-        margin: 36px auto 24px;
-        display: flex;
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-        border: 1px solid #eee;
-        position: relative;
-        padding: 0;
-        overflow: hidden;
-        width: 100%;
-      }
-      .line-numbers-bar {
-        padding-top: 18px;
-        padding-bottom: 18px;
-        padding-left: 12px;
-        padding-right: 5px;
-        background: #fafbfc;
-        border-right: 1px solid #eee;
-        color: #b0b0b0;
-        font-family: monospace;
-        font-size: 12px;
-        text-align: right;
-        min-width: 2em;
-        user-select: none;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        flex-shrink: 0;
-        box-sizing: border-box;
-      }
-      #post-content {
-        padding: 18px 15px;
-        flex: 1 1 0%;
-        font-size: 15px;
-        line-height: 1.7;
-        min-width: 0;
-        box-sizing: border-box;
-        word-break: break-word;
-        overflow-wrap: break-word;
-      }
-      #post-content img,
-      #post-content table,
-      #post-content pre,
-      #post-content code {
-        max-width: 100%;
-        box-sizing: border-box;
-        overflow: auto;
-      }
-      </style>
-      <script>
-      function refreshLineNumbers() {
-        const content = document.getElementById('post-content');
-        const lnb = document.getElementById('line-numbers-bar');
-        if (!content || !lnb) return;
-        const paragraphs = Array.from(content.querySelectorAll('p'));
-        lnb.innerHTML = '';
-        paragraphs.forEach((p, i) => {
-          const num = document.createElement('div');
-          num.textContent = i + 1;
-          // 保证高度与段落对齐
-          num.style.height = p.offsetHeight + "px";
-          num.style.lineHeight = p.offsetHeight + "px";
-          num.style.display = "flex";
-          num.style.alignItems = "flex-start";
-          lnb.appendChild(num);
-        });
-      }
-      document.addEventListener('DOMContentLoaded', function() {
-        refreshLineNumbers();
-        // 监听正文变化（如折叠/展开/异步修改等），自动刷新行号
-        const content = document.getElementById('post-content');
-        if (window.MutationObserver && content) {
-          const observer = new MutationObserver(refreshLineNumbers);
-          observer.observe(content, { childList: true, subtree: true, attributes: true, characterData: true });
-        }
-        // 监听窗口resize，防止字体变化导致行高不对
-        window.addEventListener('resize', refreshLineNumbers);
-      });
-      </script>
-
       <div class="navigation-buttons"
         style="
           width: 90%;
