@@ -39,8 +39,8 @@ layout: default
   background: #f0f0f0;
 }
 #scroll-buttons img {
-  width: 44px;
-  height: 44px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;
   pointer-events: none;
 }
@@ -318,7 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
   {% endfor %}
 </div>
 
-<!-- 正文及<p>段落行号栏 -->
+<!-- 正文及行号栏 -->
 <article>
   <div class="container">
     <div class="row">
@@ -394,6 +394,8 @@ document.addEventListener("DOMContentLoaded", function () {
           // 保证高度与段落对齐
           num.style.height = p.offsetHeight + "px";
           num.style.lineHeight = p.offsetHeight + "px";
+          num.style.display = "flex";
+          num.style.alignItems = "flex-start";
           lnb.appendChild(num);
         });
       });
