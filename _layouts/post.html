@@ -349,6 +349,21 @@ document.addEventListener("DOMContentLoaded", function () {
   margin-right: auto;
   box-sizing: border-box;
 }
+
+/* 新增：让正文和导航中的链接变蓝并带下划线 */
+.post-content a,
+.navigation-buttons a,
+.list-inline a,
+.catalog-container a {
+  color: #1976d2 !important;
+  text-decoration: underline;
+}
+.post-content a:hover,
+.navigation-buttons a:hover,
+.list-inline a:hover,
+.catalog-container a:hover {
+  color: #0d47a1 !important;
+}
 </style>
 <article>
   <div class="container">
