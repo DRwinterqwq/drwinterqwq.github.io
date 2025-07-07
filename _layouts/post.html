@@ -328,10 +328,9 @@ document.addEventListener("DOMContentLoaded", function () {
           {{ content | markdownify }}
         </div>
       </div>
-      <!-- 行号栏与正文栏样式 -->
       <style>
       #post-content-wrapper {
-        max-width: 650px;
+        max-width: 700px;
         margin: 40px auto;
         display: flex;
         background: #fff;
@@ -340,6 +339,8 @@ document.addEventListener("DOMContentLoaded", function () {
         border: 1px solid #eee;
         position: relative;
         padding: 0;
+        overflow: hidden;
+        width: 100%;
       }
       .line-numbers-bar {
         padding-top: 28px;
@@ -357,13 +358,27 @@ document.addEventListener("DOMContentLoaded", function () {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+        flex-shrink: 0;
+        box-sizing: border-box;
       }
       #post-content {
         padding: 28px 24px;
-        flex: 1;
+        flex: 1 1 0%;
         background: transparent;
         font-size: 1.09em;
         line-height: 1.8;
+        min-width: 0;
+        box-sizing: border-box;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+      #post-content img,
+      #post-content table,
+      #post-content pre,
+      #post-content code {
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: auto;
       }
       </style>
       <script>
@@ -380,7 +395,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
       </script>
-      <!-- 行号栏样式与JS END -->
 
       <div class="navigation-buttons"
         style="
