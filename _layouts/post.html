@@ -1,0 +1,472 @@
+---
+layout: default
+---
+
+<!-- 滚动到顶部和底部按钮 -->
+<style>
+#scroll-buttons {
+  position: fixed;
+  right: 24px;
+  bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 999;
+  transition: opacity 0.4s;
+  opacity: 0;
+  pointer-events: none;
+}
+#scroll-buttons.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+#scroll-buttons button {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  padding: 10px;
+  margin: 4px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#scroll-buttons button:hover {
+  background: #f0f0f0;
+}
+#scroll-buttons img {
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+}
+</style>
+<div id="scroll-buttons">
+  <button id="scroll-to-top" title="回到顶部">
+    <img src="/img/post_up.svg" alt="Up">
+  </button>
+  <button id="scroll-to-bottom" title="跳到页尾">
+    <img src="/img/post_down.svg" alt="Down">
+  </button>
+</div>
+<script>
+(function() {
+  const scrollButtons = document.getElementById('scroll-buttons');
+  const btnUp = document.getElementById('scroll-to-top');
+  const btnDown = document.getElementById('scroll-to-bottom');
+
+  function toggleButtons() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    const windowHeight = window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+    // 顶部100像素内和底部100像素内都不显示
+    if (scrollY > 100 && (docHeight - (scrollY + windowHeight) > 100)) {
+      scrollButtons.classList.add('show');
+    } else {
+      scrollButtons.classList.remove('show');
+    }
+  }
+  window.addEventListener('scroll', toggleButtons);
+
+  btnUp.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  btnDown.addEventListener('click', function() {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  });
+})();
+</script>
+
+<!-- 禁止页面双指缩放 -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header {
+        position: relative;
+        background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}');
+    }
+
+    {% if page.header-mask %}
+    header.intro-header .header-mask {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: rgba(0,0,0, {{ page.header-mask }});
+    }
+    {% endif %}
+</style>
+<header class="intro-header">
+    <div class="header-mask"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>{{ page.title }}</h1>
+                    <h2 class="subheading">{{ page.subtitle }}</h2>
+                    <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- 弹出层 -->
+<div class="image-modal" id="imageModal">
+    <img id="modalImage" src="" alt="Enlarged Image">
+</div>
+
+<!-- 样式 -->
+<style>
+    /* 弹出层样式 */
+    .image-modal {
+        display: none; /* 默认隐藏 */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8); /* 半透明黑背景 */
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* 弹出层中的图片 */
+    .image-modal img {
+        max-width: 90%;
+        max-height: 90%;
+        border: 2px solid white;
+        border-radius: 8px;
+        transform-origin: center center;
+    }
+</style>
+
+<!-- 脚本 -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // 获取所有图片和弹出层元素
+        const images = document.querySelectorAll(".post-container img"); // 选择文章内容中的所有图片
+        const modal = document.getElementById("imageModal");
+        const modalImage = document.getElementById("modalImage");
+
+        // Zoom和拖动控制变量
+        let scale = 1;
+        let initialDistance = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        // 图片的分辨率
+        let originalWidth = 0;
+        let originalHeight = 0;
+
+        // 为每张图片添加点击事件
+        images.forEach(image => {
+            image.addEventListener("click", () => {
+                modal.style.display = "flex"; // 显示弹出层
+                modalImage.src = image.src; // 将弹出层的图片源设置为点击的图片
+                
+                // 获取图片的原始分辨率
+                const img = new Image();
+                img.src = image.src;
+                img.onload = () => {
+                    originalWidth = img.naturalWidth;
+                    originalHeight = img.naturalHeight;
+                };
+
+                // 重置缩放比例和位置
+                scale = 1;
+                offsetX = 0;
+                offsetY = 0;
+                modalImage.style.transform = `scale(${scale}) translate(0px, 0px)`;
+            });
+        });
+
+        // 点击空白区域关闭弹出层
+        modal.addEventListener("click", (event) => {
+            if (event.target === modal) { // 仅在点击空白区域时关闭
+                modal.style.display = "none";
+            }
+        });
+
+        // 鼠标滚轮缩放图片
+        modalImage.addEventListener("wheel", (event) => {
+            event.preventDefault();
+            const zoomSpeed = 0.1; // 缩放速度
+
+            // 动态限制缩放比例
+            const maxScale = Math.max(originalWidth / modalImage.offsetWidth, originalHeight / modalImage.offsetHeight);
+            const minScale = 1;
+
+            scale += event.deltaY < 0 ? zoomSpeed : -zoomSpeed; // 根据滚轮方向调整缩放
+            scale = Math.min(Math.max(minScale, scale), maxScale); // 限制缩放比例
+
+            modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+        });
+
+        // 处理双指缩放
+        modalImage.addEventListener("touchstart", (event) => {
+            if (event.touches.length === 2) {
+                // 计算双指之间的初始距离
+                const touch1 = event.touches[0];
+                const touch2 = event.touches[1];
+                initialDistance = Math.hypot(
+                    touch2.pageX - touch1.pageX,
+                    touch2.pageY - touch1.pageY
+                );
+            }
+        });
+
+        modalImage.addEventListener("touchmove", (event) => {
+            if (event.touches.length === 2) {
+                event.preventDefault(); // 禁止默认滚动行为
+                const touch1 = event.touches[0];
+                const touch2 = event.touches[1];
+                const currentDistance = Math.hypot(
+                    touch2.pageX - touch1.pageX,
+                    touch2.pageY - touch1.pageY
+                );
+
+                // 动态限制缩放比例
+                const maxScale = Math.max(originalWidth / modalImage.offsetWidth, originalHeight / modalImage.offsetHeight);
+                const minScale = 1;
+
+                // 根据距离变化调整缩放比例
+                const zoomSpeed = 0.005; // 缩放速度
+                scale += (currentDistance - initialDistance) * zoomSpeed;
+                scale = Math.min(Math.max(minScale, scale), maxScale); // 限制缩放比例
+
+                modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+
+                // 更新初始距离
+                initialDistance = currentDistance;
+            }
+        });
+
+        // 鼠标拖动图片
+        modalImage.addEventListener("mousedown", (event) => {
+            isDragging = true;
+            startX = event.clientX;
+            startY = event.clientY;
+        });
+
+        document.addEventListener("mousemove", (event) => {
+            if (isDragging) {
+                const dx = event.clientX - startX;
+                const dy = event.clientY - startY;
+                offsetX += dx;
+                offsetY += dy;
+                modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+                startX = event.clientX;
+                startY = event.clientY;
+            }
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+        });
+
+        // 手指拖动图片
+        modalImage.addEventListener("touchstart", (event) => {
+            if (event.touches.length === 1) {
+                isDragging = true;
+                startX = event.touches[0].clientX;
+                startY = event.touches[0].clientY;
+            }
+        });
+
+        modalImage.addEventListener("touchmove", (event) => {
+            if (isDragging && event.touches.length === 1) {
+                event.preventDefault();
+                const dx = event.touches[0].clientX - startX;
+                const dy = event.touches[0].clientY - startY;
+                offsetX += dx;
+                offsetY += dy;
+                modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+                startX = event.touches[0].clientX;
+                startY = event.touches[0].clientY;
+            }
+        });
+
+        modalImage.addEventListener("touchend", () => {
+            isDragging = false;
+        });
+    });
+</script>
+
+<!-- 计算并显示字数及预计阅读时间 -->
+<div class="word-count" style="text-align: center; margin-top: 20px; font-size: 16px; color: #555;">
+  {% assign word_count = content 
+  | strip_html
+  | replace: ' ', ''
+  | regex_replace: '[^a-zA-Z0-9\u4e00-\u9fa5\u3040-\u309F\u30A0-\u30FF]', ''
+  | size %}
+  <p style="background: #f9f9f9; display: inline-block; padding: 10px 20px; border-radius: 8px; border: 1px solid #ddd;">
+    全文总字数（不统计符号）：<strong style="color: #333;">{{ word_count }}</strong><br>
+    预计阅读时间：<strong style="color: #333;">{{ word_count | divided_by: 700.0 | round: 1 }} min</strong>
+  </p>
+</div>
+
+<!-- 标签样式 -->
+<style>
+  .tags {
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .tag {
+    display: inline-block;
+    margin: 0 6px 4px 0;
+    padding: 3px 12px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 13px;
+    text-decoration: none;
+    background: #888; /* 默认灰色 */
+  }
+  .tag-r18 { background: #e74c3c !important; }
+  .tag-allage { background: #27ae60 !important; }
+</style>
+
+<!-- 标签显示模块 -->
+<div class="tags">
+  {% for tag in page.tags %}
+    {% assign color = '' %}
+    {% assign tag_name = tag %}
+    {% if tag contains '{#' and tag contains '}' %}
+      {% assign color = tag | split: '{#' | last | split: '}' | first | prepend: '#' %}
+      {% assign tag_name = tag | split: '{#' | first | strip %}
+    {% endif %}
+    {% if tag_name == 'R18' %}
+      <a class="tag tag-r18" href="{{ site.baseurl }}/1-tags/#R18" title="R18">R18</a>
+    {% elsif tag_name == '全年龄' %}
+      <a class="tag tag-allage" href="{{ site.baseurl }}/1-tags/#全年龄" title="全年龄">全年龄</a>
+    {% elsif color != '' %}
+      <a class="tag" style="background:{{ color }};" href="{{ site.baseurl }}/1-tags/#{{ tag_name }}" title="{{ tag_name }}">{{ tag_name }}</a>
+    {% else %}
+      <a class="tag" style="background:#888;" href="{{ site.baseurl }}/1-tags/#{{ tag_name }}" title="{{ tag_name }}">{{ tag_name }}</a>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="post-container"
+                style="
+                    width: 90%;
+                    max-width: 720px;
+                    background: linear-gradient(135deg, #ffffff, #f2f2f2);
+                    padding: 20px;
+                    border-radius: 10px;
+                    border: 1px solid #e0e0e0;
+                    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+                    margin: 40px auto;
+                    font-size: 14px;
+                    line-height: 1.6;">
+                
+                {{ content | markdownify }}
+
+            </div>  
+
+            <!-- Navigation Buttons -->
+            <div class="navigation-buttons"
+                style="
+                    width: 90%;
+                    max-width: 720px;
+                    display: flex;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    margin: 20px auto;">
+                
+                {% if page.previous.url %}
+                <a href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}" 
+                    class="btn btn-navigation previous"
+                    style="
+                        flex: 1 1 calc(50% - 10px);
+                        text-align: center;
+                        padding: 10px;
+                        background-color: #ffffff;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 8px;
+                        text-decoration: none;
+                        color: #333;
+                        font-size: 14px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;">
+                    Previous<br>
+                    <span>{{ page.previous.title }}</span>
+                </a>
+                {% endif %}
+
+                {% if page.next.url %}
+                <a href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}" 
+                    class="btn btn-navigation next"
+                    style="
+                        flex: 1 1 calc(50% - 10px);
+                        text-align: center;
+                        padding: 10px;
+                        background-color: #ffffff;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 8px;
+                        text-decoration: none;
+                        color: #333;
+                        font-size: 14px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;">
+                    Next<br>
+                    <span>{{ page.next.title }}</span>
+                </a>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+</article>
+
+<!-- Side Catalog Container -->
+{% if page.catalog %}
+<div class="
+    col-lg-2 col-lg-offset-0
+    visible-lg-block
+    sidebar-container
+    catalog-container">
+    <div class="side-catalog">
+        <hr class="hidden-sm hidden-xs">
+        <h5>
+            <a class="catalog-toggle" href="#">CATALOG</a>
+        </h5>
+        <ul class="catalog-body"></ul>
+    </div>
+</div>
+{% endif %}
+
+<!-- Sidebar Container -->
+<div class="
+    col-lg-8 col-lg-offset-2
+    col-md-10 col-md-offset-1
+    sidebar-container">
+
+    <!-- Friends Blog -->
+    {% if site.friends %}
+    <hr>
+    <h5>Special Thanks</h5>
+    <ul class="list-inline">
+        {% for friend in site.friends %}
+            <li><a href="{{friend.href}}">{{friend.title}}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
