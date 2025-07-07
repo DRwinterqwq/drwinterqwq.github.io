@@ -39,8 +39,8 @@ layout: default
   background: #f0f0f0;
 }
 #scroll-buttons img {
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
   pointer-events: none;
 }
@@ -360,19 +360,16 @@ document.addEventListener("DOMContentLoaded", function () {
         align-items: flex-end;
         flex-shrink: 0;
         box-sizing: border-box;
-        height: auto;
       }
       #post-content {
         padding: 18px 15px;
         flex: 1 1 0%;
-        background: transparent;
         font-size: 15px;
         line-height: 1.7;
         min-width: 0;
         box-sizing: border-box;
         word-break: break-word;
         overflow-wrap: break-word;
-        font-family: "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace, sans-serif;
       }
       #post-content img,
       #post-content table,
@@ -388,24 +385,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const content = document.getElementById('post-content');
         const lnb = document.getElementById('line-numbers-bar');
         if (!content || !lnb) return;
-        setTimeout(() => {
-          // 获取内容渲染后的高度
-          const contentHeight = content.scrollHeight;
-          // 获取 line-height
-          const computedStyle = window.getComputedStyle(content);
-          let lineHeight = parseFloat(computedStyle.lineHeight);
-          if (isNaN(lineHeight)) lineHeight = 24;
-          // 真实行数
-          const lineCount = Math.round(contentHeight / lineHeight);
-          lnb.innerHTML = '';
-          for(let i=1; i<=lineCount; i++){
-            const num = document.createElement('div');
-            num.textContent = i;
-            num.style.height = lineHeight + "px";
-            num.style.lineHeight = lineHeight + "px";
-            lnb.appendChild(num);
-          }
-        }, 80);
+        // 只检测<p>元素
+        const paragraphs = Array.from(content.querySelectorAll('p'));
+        lnb.innerHTML = '';
+        for(let i=0; i<paragraphs.length; i++){
+          const num = document.createElement('div');
+          num.textContent = i+1;
+          // 对齐段落高度
+          num.style.height = paragraphs[i].offsetHeight + "px";
+          num.style.lineHeight = paragraphs[i].offsetHeight + "px";
+          lnb.appendChild(num);
+        }
       });
       </script>
 
