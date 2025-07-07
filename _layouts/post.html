@@ -381,11 +381,10 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       </style>
       <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      function refreshLineNumbers() {
         const content = document.getElementById('post-content');
         const lnb = document.getElementById('line-numbers-bar');
         if (!content || !lnb) return;
-        // 只检测<p>
         const paragraphs = Array.from(content.querySelectorAll('p'));
         lnb.innerHTML = '';
         paragraphs.forEach((p, i) => {
@@ -398,6 +397,17 @@ document.addEventListener("DOMContentLoaded", function () {
           num.style.alignItems = "flex-start";
           lnb.appendChild(num);
         });
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        refreshLineNumbers();
+        // 监听正文变化（如折叠/展开/异步修改等），自动刷新行号
+        const content = document.getElementById('post-content');
+        if (window.MutationObserver && content) {
+          const observer = new MutationObserver(refreshLineNumbers);
+          observer.observe(content, { childList: true, subtree: true, attributes: true, characterData: true });
+        }
+        // 监听窗口resize，防止字体变化导致行高不对
+        window.addEventListener('resize', refreshLineNumbers);
       });
       </script>
 
