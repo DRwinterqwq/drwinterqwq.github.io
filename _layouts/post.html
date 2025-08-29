@@ -381,32 +381,38 @@ layout: default
 {% unless page.hide %}
 
   {% assign posts = site.posts %}
-  {% assign found = false %}
   {% assign prev_post = nil %}
   {% assign next_post = nil %}
+  {% assign found = false %}
 
   {%- comment -%}
-  遍历所有文章，找到当前文章，并向前/向后查找第一个未 hide 的文章
+  找到当前文章的下标
   {%- endcomment -%}
-  {% for i in (0..posts.size) %}
+  {% for post in posts %}
+    {% if post.url == page.url %}
+      {% assign current_index = forloop.index0 %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {%- comment -%}
+  向前找（更旧文章）：current_index+1, current_index+2, ...
+  {%- endcomment -%}
+  {% for i in (current_index+1)..(posts.size-1) %}
     {% assign p = posts[i] %}
-    {% if p.url == page.url %}
-      {# 向前查找 #}
-      {% assign j = i | plus: 1 %}
-      {% while j < posts.size and prev_post == nil %}
-        {% if posts[j].hide != true %}
-          {% assign prev_post = posts[j] %}
-        {% endif %}
-        {% assign j = j | plus: 1 %}
-      {% endwhile %}
-      {# 向后查找 #}
-      {% assign k = i | minus: 1 %}
-      {% while k >= 0 and next_post == nil %}
-        {% if posts[k].hide != true %}
-          {% assign next_post = posts[k] %}
-        {% endif %}
-        {% assign k = k | minus: 1 %}
-      {% endwhile %}
+    {% if p.hide != true %}
+      {% assign prev_post = p %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {%- comment -%}
+  向后找（更新文章）：current_index-1, current_index-2, ...
+  {%- endcomment -%}
+  {% for i in (current_index-1) downto 0 %}
+    {% assign p = posts[i] %}
+    {% if p.hide != true %}
+      {% assign next_post = p %}
       {% break %}
     {% endif %}
   {% endfor %}
