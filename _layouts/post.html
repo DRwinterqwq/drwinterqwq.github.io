@@ -377,63 +377,6 @@ layout: default
 
             </div>  
 
-<!-- Navigation Buttons -->
-{% unless page.hide %}
-
-  {% assign posts = site.posts %}
-  {% assign prev_post = nil %}
-  {% assign next_post = nil %}
-  {% assign found = false %}
-
-  {%- comment -%}
-  找到当前文章的下标
-  {%- endcomment -%}
-  {% for post in posts %}
-    {% if post.url == page.url %}
-      {% assign current_index = forloop.index0 %}
-      {% break %}
-    {% endif %}
-  {% endfor %}
-
-  {%- comment -%}
-  向前找（更旧文章）：current_index+1, current_index+2, ...
-  {%- endcomment -%}
-  {% for i in (current_index+1)..(posts.size-1) %}
-    {% assign p = posts[i] %}
-    {% if p.hide != true %}
-      {% assign prev_post = p %}
-      {% break %}
-    {% endif %}
-  {% endfor %}
-
-  {%- comment -%}
-  向后找（更新文章）：current_index-1, current_index-2, ...
-  {%- endcomment -%}
-  {% for i in (current_index-1) downto 0 %}
-    {% assign p = posts[i] %}
-    {% if p.hide != true %}
-      {% assign next_post = p %}
-      {% break %}
-    {% endif %}
-  {% endfor %}
-
-  <div class="navigation-buttons" style="display:flex;justify-content:space-between;margin:20px 0;">
-    {% if prev_post %}
-      <a href="{{ prev_post.url | relative_url }}" class="btn btn-navigation previous">
-        Previous<br>
-        <span>{{ prev_post.title }}</span>
-      </a>
-    {% endif %}
-    {% if next_post %}
-      <a href="{{ next_post.url | relative_url }}" class="btn btn-navigation next">
-        Next<br>
-        <span>{{ next_post.title }}</span>
-      </a>
-    {% endif %}
-  </div>
-
-{% endunless %}
-
         </div>
     </div>
 </article>
