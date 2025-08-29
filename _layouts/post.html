@@ -380,45 +380,50 @@ layout: default
 <!-- Navigation Buttons -->
 {% unless page.hide %}
 
-  {% assign visible_posts = site.posts | where_exp: "item", "item.hide != true" %}
-  {% assign idx = nil %}
-  {% for post in visible_posts %}
-    {% if post.url == page.url %}
-      {% assign idx = forloop.index0 %}
-    {% endif %}
-  {% endfor %}
+  {% assign posts = site.posts %}
+  {% assign found = false %}
   {% assign prev_post = nil %}
   {% assign next_post = nil %}
-  {% if idx != nil %}
-    {% if idx > 0 %}
-      {% assign prev_post = visible_posts[idx | minus: 1] %}
+
+  {%- comment -%}
+  遍历所有文章，找到当前文章，并向前/向后查找第一个未 hide 的文章
+  {%- endcomment -%}
+  {% for i in (0..posts.size) %}
+    {% assign p = posts[i] %}
+    {% if p.url == page.url %}
+      {# 向前查找 #}
+      {% assign j = i | plus: 1 %}
+      {% while j < posts.size and prev_post == nil %}
+        {% if posts[j].hide != true %}
+          {% assign prev_post = posts[j] %}
+        {% endif %}
+        {% assign j = j | plus: 1 %}
+      {% endwhile %}
+      {# 向后查找 #}
+      {% assign k = i | minus: 1 %}
+      {% while k >= 0 and next_post == nil %}
+        {% if posts[k].hide != true %}
+          {% assign next_post = posts[k] %}
+        {% endif %}
+        {% assign k = k | minus: 1 %}
+      {% endwhile %}
+      {% break %}
     {% endif %}
-    {% if idx < visible_posts.size | minus: 1 %}
-      {% assign next_post = visible_posts[idx | plus: 1] %}
+  {% endfor %}
+
+  <div class="navigation-buttons" style="display:flex;justify-content:space-between;margin:20px 0;">
+    {% if prev_post %}
+      <a href="{{ prev_post.url | relative_url }}" class="btn btn-navigation previous">
+        Previous<br>
+        <span>{{ prev_post.title }}</span>
+      </a>
     {% endif %}
-  {% endif %}
-
-  <div class="navigation-buttons"
-      style="width: 90%; max-width: 720px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin: 20px auto;">
-
-      {% if prev_post %}
-      <a href="{{ prev_post.url | prepend: site.baseurl | replace: '//', '/' }}" 
-          class="btn btn-navigation previous"
-          style="flex: 1 1 calc(50% - 10px); text-align: center; padding: 10px; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-          Previous<br>
-          <span>{{ prev_post.title }}</span>
+    {% if next_post %}
+      <a href="{{ next_post.url | relative_url }}" class="btn btn-navigation next">
+        Next<br>
+        <span>{{ next_post.title }}</span>
       </a>
-      {% endif %}
-
-      {% if next_post %}
-      <a href="{{ next_post.url | prepend: site.baseurl | replace: '//', '/' }}" 
-          class="btn btn-navigation next"
-          style="flex: 1 1 calc(50% - 10px); text-align: center; padding: 10px; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; text-decoration: none; color: #333; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-          Next<br>
-          <span>{{ next_post.title }}</span>
-      </a>
-      {% endif %}
-
+    {% endif %}
   </div>
 
 {% endunless %}
