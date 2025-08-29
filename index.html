@@ -13,29 +13,31 @@ description: "欢迎来到本博客！"
 </style>
 
 {% for post in paginator.posts %}
-<div class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
-        <h2 class="post-title">
-            {{ post.title }}
-        </h2>
-        {% if post.subtitle %}
-        <h3 class="post-subtitle">
-            {{ post.subtitle }}
-        </h3>
-        {% endif %}
-        <div class="post-content-preview">
-            {% if post.preview-text %}
-                {{ post.preview-text }}
-            {% else %}
-                <img src="{{ site.baseurl }}/{{ post.header-img }}" alt="header image">
+  {% unless post.hide %}
+    <div class="post-preview">
+        <a href="{{ post.url | prepend: site.baseurl }}">
+            <h2 class="post-title">
+                {{ post.title }}
+            </h2>
+            {% if post.subtitle %}
+            <h3 class="post-subtitle">
+                {{ post.subtitle }}
+            </h3>
             {% endif %}
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
-    </p>
-</div>
-<hr>
+            <div class="post-content-preview">
+                {% if post.preview-text %}
+                    {{ post.preview-text }}
+                {% else %}
+                    <img src="{{ site.baseurl }}/{{ post.header-img }}" alt="header image">
+                {% endif %}
+            </div>
+        </a>
+        <p class="post-meta">
+            Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
+        </p>
+    </div>
+    <hr>
+  {% endunless %}
 {% endfor %}
 
 <!-- Pager -->
