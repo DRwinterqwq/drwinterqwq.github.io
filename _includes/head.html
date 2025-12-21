@@ -27,12 +27,10 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ "/css/hux-blog.min.css" | prepend: site.baseurl }}">
 
-{% raw %}
 {% if page.layout == "post" %}
 
     <link rel="stylesheet" href="{{ "/css/blog-fonts.css" | prepend: site.baseurl }}?v={{ site.time | date: '%Y%m%d%H%M' }}">
 {% endif %}
-{% endraw %}
 
     <!-- Pygments Github CSS -->
     <link rel="stylesheet" href="{{ "/css/syntax.css" | prepend: site.baseurl }}">
