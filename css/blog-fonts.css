@@ -1,0 +1,32 @@
+@font-face {
+ font-family: 'CaviarDreams';
+ src: url('/fonts/CaviarDreams.woff2') format('woff2'),
+ url('/fonts/CaviarDreams.woff') format('woff'),
+ url('/fonts/CaviarDreams.ttf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
+ font-display: swap;
+ unicode-range: U+0000-00FF, U+0100-024F, U+1E00-1EFF;
+}
+@font-face {
+ font-family: 'KaitiLocal';
+ src: url('/fonts/Kaiti.woff2') format('woff2'),
+ url('/fonts/Kaiti.woff') format('woff'),
+ url('/fonts/Kaiti.ttf') format('truetype');
+ font-weight: normal;
+ font-style: normal;
+ font-display: swap;
+ unicode-range: U+4E00-9FFF, U+3400-4DBF, U+F900-FAFF;
+}
+
+.post-container,
+.post-container p,
+.post-container li,
+.post-container h1,
+.post-container h2,
+.post-container h3,
+.post-container h4,
+.post-container h5,
+.post-container h6 {
+ font-family: 'CaviarDreams', 'KaitiLocal', -apple-system, BlinkMacSystemFont,
+ "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
