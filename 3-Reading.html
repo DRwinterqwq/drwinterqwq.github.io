@@ -1,0 +1,33 @@
+---
+layout: readinglay
+title: "Reading"
+description: "这里是本人整理或搬运的一些Galgame剧情。"
+header-img: "img/reading-bg.jpg"
+---
+
+
+<div class="posts-list">
+
+  {% assign reviews = site.pages | where: "type", "reading_review" %}
+  {% assign reviews = reviews | sort: "order" %}
+
+  {% for review in reviews %}
+    <article class="post-card">
+      <a class="post-card-link" href="{{ review.url | relative_url }}">
+        {% if review.cover %}
+          <div class="post-card-thumb">
+            <img src="{{ review.cover | relative_url }}" alt="{{ review.title }}">
+          </div>
+        {% endif %}
+        <div class="post-card-body">
+          <h2 class="post-card-title">{{ review.title }}</h2>
+          {% if review.excerpt %}
+            <p class="post-card-excerpt">{{ review.excerpt }}</p>
+          {% else %}
+            <p class="post-card-excerpt">{{ review.content | strip_html | truncate: 120 }}</p>
+          {% endif %}
+        </div>
+      </a>
+    </article>
+  {% endfor %}
+</div>
