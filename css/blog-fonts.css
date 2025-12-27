@@ -30,14 +30,3 @@
 .post-container h6 {
  font-family: 'CaviarDreams', 'KaitiLocal', -apple-system, BlinkMacSystemFont,
  "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
-
-.post-container blockquote,
-.post-container blockquote p,
-.post-container blockquote * {
- font-style: normal !important;
-}
-
-.post-container blockquote em,
-.post-container blockquote i {
- font-style: normal !important;
-}
