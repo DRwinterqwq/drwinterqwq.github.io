@@ -1,11 +1,9 @@
 ---
-title: "示例小说：The Sample Novel"
+title: "恋爱成双"
 type: reading_review
-novel: sample-novel
-cover: /img/sample-cover.jpg
-excerpt: "这是示例小说的简介。"
-order: 1
-layout: reading_review
+cover: /img_post/恋爱成双/head.jpg
+excerpt: "劈腿？专一？"
+layout: Reading_View
 ---
 
 这是示例小说的简介。你可以在这里放小说的主要内容摘要、目录说明或者阅读说明。
