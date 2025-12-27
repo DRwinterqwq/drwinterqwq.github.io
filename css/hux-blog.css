@@ -181,9 +181,21 @@ blockquote {
   font-size: 0.95em;
   margin: 20px 0 20px;
 }
+
 blockquote p {
   margin: 0;
 }
+
+.post-container.quotedcontent-normal blockquote,
+.post-container.quotedcontent-normal blockquote p,
+.post-container.quotedcontent-normal blockquote * {
+ font-style: normal !important;
+}
+.post-container.quotedcontent-normal blockquote em,
+.post-container.quotedcontent-normal blockquote i {
+ font-style: normal !important;
+}
+
 small.img-hint {
   display: block;
   margin-top: -20px;
@@ -1088,15 +1100,4 @@ img::-moz-selection {
 }
 .page-fullscreen footer .copyright a:hover {
   color: #ddd;
-}
-
-/ 当在文章 front-matter 中设置 quotedcontent_normal: true 时，引用内容不斜体 /
-.post-container.quotedcontent-normal blockquote,
-.post-container.quotedcontent-normal blockquote p,
-.post-container.quotedcontent-normal blockquote * {
- font-style: normal !important;
-}
-.post-container.quotedcontent-normal blockquote em,
-.post-container.quotedcontent-normal blockquote i {
- font-style: normal !important;
 }
