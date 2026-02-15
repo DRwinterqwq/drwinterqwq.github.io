@@ -35,7 +35,5 @@
     /* 检测本地楷体 */
     '楷体', 'KaiTi', 'STKaiti',
     /* 再用自定义的 web font */
-    'CaviarDreams_Web', 'KaitiLocal_Web',
-    /* 系统字体备选 */
-    -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    'CaviarDreams_Web', 'KaitiLocal_Web',     
 }
