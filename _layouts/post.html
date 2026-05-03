@@ -208,12 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
     modalImage.addEventListener("wheel", (event) => {
         event.preventDefault();
         const zoomSpeed = 0.1;
-        // 动态最大缩放（要图片原始大小才有用）
-        const maxScale = Math.max(
-          (originalWidth || 1) / (modalImage.offsetWidth || 1),
-          (originalHeight || 1) / (modalImage.offsetHeight || 1),
-          1
-        );
+        const maxScale = 10;
         let minScale = 1;
         scale += event.deltaY < 0 ? zoomSpeed : -zoomSpeed;
         scale = Math.min(Math.max(minScale, scale), maxScale); // 限制缩放比例
@@ -280,11 +275,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 touch2.pageX - touch1.pageX,
                 touch2.pageY - touch1.pageY
             );
-            const maxScale = Math.max(
-              (originalWidth || 1) / (modalImage.offsetWidth || 1),
-              (originalHeight || 1) / (modalImage.offsetHeight || 1),
-              1
-            );
+            const maxScale = 10;
             let minScale = 1;
             const zoomSpeed = 0.001;
             scale += (currentDistance - initialDistance) * zoomSpeed;
