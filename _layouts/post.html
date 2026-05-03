@@ -162,6 +162,10 @@ layout: default
         let offsetX = 0;
         let offsetY = 0;
 
+        // 鼠标拖动专用变量
+        let mouseHoldTimeout = null;
+        let mouseIsDown = false;
+
         // 图片的分辨率
         let originalWidth = 0;
         let originalHeight = 0;
@@ -210,7 +214,7 @@ layout: default
             modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
         });
 
-        // 处理双指缩放
+        // 处理双指缩放（降低灵敏度，更平滑）
         modalImage.addEventListener("touchstart", (event) => {
             if (event.touches.length === 2) {
                 // 计算双指之间的初始距离
@@ -237,8 +241,8 @@ layout: default
                 const maxScale = Math.max(originalWidth / modalImage.offsetWidth, originalHeight / modalImage.offsetHeight);
                 const minScale = 1;
 
-                // 根据距离变化调整缩放比例
-                const zoomSpeed = 0.005; // 缩放速度
+                // 灵敏度降低，缩放更平滑
+                const zoomSpeed = 0.001;
                 scale += (currentDistance - initialDistance) * zoomSpeed;
                 scale = Math.min(Math.max(minScale, scale), maxScale); // 限制缩放比例
 
@@ -249,15 +253,21 @@ layout: default
             }
         });
 
-        // 鼠标拖动图片
+        // 鼠标拖动图片 - 需要左键长按 150ms
         modalImage.addEventListener("mousedown", (event) => {
-            isDragging = true;
+            if (event.button !== 0) return; // 仅限左键
+            mouseIsDown = true;
             startX = event.clientX;
             startY = event.clientY;
+            mouseHoldTimeout = setTimeout(() => {
+                if (mouseIsDown) {
+                    isDragging = true;
+                    document.body.style.cursor = 'grabbing';
+                }
+            }, 150); // 150ms 长按判定
         });
-
         document.addEventListener("mousemove", (event) => {
-            if (isDragging) {
+            if (isDragging && mouseIsDown) {
                 const dx = event.clientX - startX;
                 const dy = event.clientY - startY;
                 offsetX += dx;
@@ -267,9 +277,11 @@ layout: default
                 startY = event.clientY;
             }
         });
-
         document.addEventListener("mouseup", () => {
+            mouseIsDown = false;
             isDragging = false;
+            document.body.style.cursor = '';
+            clearTimeout(mouseHoldTimeout);
         });
 
         // 手指拖动图片
