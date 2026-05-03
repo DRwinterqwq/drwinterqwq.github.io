@@ -204,13 +204,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // 鼠标滚轮缩放图片
+    // ====== 鼠标滚轮缩放图片（比例型，灵敏适应高倍缩放）======
     modalImage.addEventListener("wheel", (event) => {
         event.preventDefault();
-        const zoomSpeed = 0.1;
+        // 可调：越大越灵敏（原为0.1，现为倍数乘除法）
+        const zoomBase = 1.12;
         const maxScale = 10;
         let minScale = 1;
-        scale += event.deltaY < 0 ? zoomSpeed : -zoomSpeed;
+        if (event.deltaY < 0) {
+            scale *= zoomBase;
+        } else {
+            scale /= zoomBase;
+        }
         scale = Math.min(Math.max(minScale, scale), maxScale); // 限制缩放比例
         modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
     });
@@ -249,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
         clearTimeout(mouseHoldTimeout);
     });
 
-    // 触屏（可选，和原脚本一致，未改）
+    // ======= 触屏（双指捏合缩放部分，采用比例缩放）=======
     modalImage.addEventListener("touchstart", (event) => {
         if (event.touches.length === 2) {
             // 双指缩放
@@ -277,11 +282,14 @@ document.addEventListener("DOMContentLoaded", function () {
             );
             const maxScale = 10;
             let minScale = 1;
-            const zoomSpeed = 0.001;
-            scale += (currentDistance - initialDistance) * zoomSpeed;
-            scale = Math.min(Math.max(minScale, scale), maxScale);
-            modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
-            initialDistance = currentDistance;
+            // 用比例方式进行缩放
+            if (initialDistance) {
+                const zoomRatio = currentDistance / initialDistance;
+                scale *= zoomRatio;
+                scale = Math.min(Math.max(minScale, scale), maxScale);
+                modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+                initialDistance = currentDistance; // 关键：更新初始距离
+            }
         }
         if (isDragging && event.touches.length === 1) {
             event.preventDefault();
