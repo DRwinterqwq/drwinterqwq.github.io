@@ -142,174 +142,171 @@ layout: default
         border: 2px solid white;
         border-radius: 8px;
         transform-origin: center center;
+        user-drag: none;          /* Safari 禁止原生拖动 */
+        -webkit-user-drag: none;
+        user-select: none;
+        -webkit-user-select: none;
     }
 </style>
 
-<!-- 脚本 -->
+<!-- 脚本（PC端图片弹窗长按拖动 & 禁用原生拖动） -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // 获取所有图片和弹出层元素
-        const images = document.querySelectorAll(".post-container img"); // 选择文章内容中的所有图片
-        const modal = document.getElementById("imageModal");
-        const modalImage = document.getElementById("modalImage");
+document.addEventListener("DOMContentLoaded", function () {
+    // 获取所有图片和弹出层元素
+    const images = document.querySelectorAll(".post-container img"); // 选择文章内容中的所有图片
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
 
-        // Zoom和拖动控制变量
-        let scale = 1;
-        let initialDistance = 0;
-        let isDragging = false;
-        let startX = 0;
-        let startY = 0;
-        let offsetX = 0;
-        let offsetY = 0;
+    // 阻止弹窗图片的原生拖拽
+    modalImage.ondragstart = function(e) {
+        e.preventDefault();
+        return false;
+    };
+    modalImage.addEventListener("dragstart", function(e){
+        e.preventDefault();
+        return false;
+    });
 
-        // 鼠标拖动专用变量
-        let mouseHoldTimeout = null;
-        let mouseIsDown = false;
+    // Zoom和拖动控制变量
+    let scale = 1;
+    let initialDistance = 0;
+    let isDragging = false;
+    let mouseIsDown = false;
+    let mouseHoldTimeout = null;
+    let startX = 0, startY = 0;
+    let offsetX = 0, offsetY = 0;
+    let originalWidth = 0, originalHeight = 0;
 
-        // 图片的分辨率
-        let originalWidth = 0;
-        let originalHeight = 0;
-
-        // 为每张图片添加点击事件
-        images.forEach(image => {
-            image.addEventListener("click", () => {
-                modal.style.display = "flex"; // 显示弹出层
-                modalImage.src = image.src; // 将弹出层的图片源设置为点击的图片
-                
-                // 获取图片的原始分辨率
-                const img = new Image();
-                img.src = image.src;
-                img.onload = () => {
-                    originalWidth = img.naturalWidth;
-                    originalHeight = img.naturalHeight;
-                };
-
-                // 重置缩放比例和位置
-                scale = 1;
-                offsetX = 0;
-                offsetY = 0;
-                modalImage.style.transform = `scale(${scale}) translate(0px, 0px)`;
-            });
-        });
-
-        // 点击空白区域关闭弹出层
-        modal.addEventListener("click", (event) => {
-            if (event.target === modal) { // 仅在点击空白区域时关闭
-                modal.style.display = "none";
-            }
-        });
-
-        // 鼠标滚轮缩放图片
-        modalImage.addEventListener("wheel", (event) => {
-            event.preventDefault();
-            const zoomSpeed = 0.1; // 缩放速度
-
-            // 动态限制缩放比例
-            const maxScale = Math.max(originalWidth / modalImage.offsetWidth, originalHeight / modalImage.offsetHeight);
-            const minScale = 1;
-
-            scale += event.deltaY < 0 ? zoomSpeed : -zoomSpeed; // 根据滚轮方向调整缩放
-            scale = Math.min(Math.max(minScale, scale), maxScale); // 限制缩放比例
-
-            modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
-        });
-
-        // 处理双指缩放（降低灵敏度，更平滑）
-        modalImage.addEventListener("touchstart", (event) => {
-            if (event.touches.length === 2) {
-                // 计算双指之间的初始距离
-                const touch1 = event.touches[0];
-                const touch2 = event.touches[1];
-                initialDistance = Math.hypot(
-                    touch2.pageX - touch1.pageX,
-                    touch2.pageY - touch1.pageY
-                );
-            }
-        });
-
-        modalImage.addEventListener("touchmove", (event) => {
-            if (event.touches.length === 2) {
-                event.preventDefault(); // 禁止默认滚动行为
-                const touch1 = event.touches[0];
-                const touch2 = event.touches[1];
-                const currentDistance = Math.hypot(
-                    touch2.pageX - touch1.pageX,
-                    touch2.pageY - touch1.pageY
-                );
-
-                // 动态限制缩放比例
-                const maxScale = Math.max(originalWidth / modalImage.offsetWidth, originalHeight / modalImage.offsetHeight);
-                const minScale = 1;
-
-                // 灵敏度降低，缩放更平滑
-                const zoomSpeed = 0.001;
-                scale += (currentDistance - initialDistance) * zoomSpeed;
-                scale = Math.min(Math.max(minScale, scale), maxScale); // 限制缩放比例
-
-                modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
-
-                // 更新初始距离
-                initialDistance = currentDistance;
-            }
-        });
-
-        // 鼠标拖动图片 - 需要左键长按 150ms
-        modalImage.addEventListener("mousedown", (event) => {
-            if (event.button !== 0) return; // 仅限左键
-            mouseIsDown = true;
-            startX = event.clientX;
-            startY = event.clientY;
-            mouseHoldTimeout = setTimeout(() => {
-                if (mouseIsDown) {
-                    isDragging = true;
-                    document.body.style.cursor = 'grabbing';
-                }
-            }, 150); // 150ms 长按判定
-        });
-        document.addEventListener("mousemove", (event) => {
-            if (isDragging && mouseIsDown) {
-                const dx = event.clientX - startX;
-                const dy = event.clientY - startY;
-                offsetX += dx;
-                offsetY += dy;
-                modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
-                startX = event.clientX;
-                startY = event.clientY;
-            }
-        });
-        document.addEventListener("mouseup", () => {
-            mouseIsDown = false;
-            isDragging = false;
-            document.body.style.cursor = '';
-            clearTimeout(mouseHoldTimeout);
-        });
-
-        // 手指拖动图片
-        modalImage.addEventListener("touchstart", (event) => {
-            if (event.touches.length === 1) {
-                isDragging = true;
-                startX = event.touches[0].clientX;
-                startY = event.touches[0].clientY;
-            }
-        });
-
-        modalImage.addEventListener("touchmove", (event) => {
-            if (isDragging && event.touches.length === 1) {
-                event.preventDefault();
-                const dx = event.touches[0].clientX - startX;
-                const dy = event.touches[0].clientY - startY;
-                offsetX += dx;
-                offsetY += dy;
-                modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
-                startX = event.touches[0].clientX;
-                startY = event.touches[0].clientY;
-            }
-        });
-
-        modalImage.addEventListener("touchend", () => {
-            isDragging = false;
+    // 打开弹窗
+    images.forEach(image => {
+        image.addEventListener("click", () => {
+            modal.style.display = "flex"; // 显示弹出层
+            modalImage.src = image.src;   // 弹出图片
+            // 获取图片原始分辨率
+            const img = new Image();
+            img.src = image.src;
+            img.onload = () => {
+                originalWidth = img.naturalWidth;
+                originalHeight = img.naturalHeight;
+            };
+            // 重置缩放比例和位置
+            scale = 1;
+            offsetX = 0;
+            offsetY = 0;
+            modalImage.style.transform = `scale(${scale}) translate(0px, 0px)`;
         });
     });
+
+    // 点击空白区域关闭弹出层
+    modal.addEventListener("click", (event) => {
+        if (event.target === modal) { // 仅在点击空白区域时关闭
+            modal.style.display = "none";
+        }
+    });
+
+    // 鼠标滚轮缩放图片
+    modalImage.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        const zoomSpeed = 0.1;
+        // 动态最大缩放（要图片原始大小才有用）
+        const maxScale = Math.max(
+          (originalWidth || 1) / (modalImage.offsetWidth || 1),
+          (originalHeight || 1) / (modalImage.offsetHeight || 1),
+          1
+        );
+        let minScale = 1;
+        scale += event.deltaY < 0 ? zoomSpeed : -zoomSpeed;
+        scale = Math.min(Math.max(minScale, scale), maxScale); // 限制缩放比例
+        modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+    });
+
+    /** 只允许“长按”150ms后才能拖动移动图片 **/
+    modalImage.addEventListener("mousedown", (event) => {
+        if (event.button !== 0) return; // 只响应鼠标左键
+        mouseIsDown = true;
+        startX = event.clientX;
+        startY = event.clientY;
+        mouseHoldTimeout = setTimeout(() => {
+            if (mouseIsDown) {
+                isDragging = true;
+                document.body.style.cursor = 'grabbing';
+            }
+        }, 150); // 150ms长按进入拖动
+    });
+    document.addEventListener("mousemove", (event) => {
+        if (isDragging && mouseIsDown) {
+            const dx = event.clientX - startX;
+            const dy = event.clientY - startY;
+            offsetX += dx;
+            offsetY += dy;
+            modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+            startX = event.clientX;
+            startY = event.clientY;
+        }
+    });
+    document.addEventListener("mouseup", () => {
+        // 松手，取消拖动模式和长按
+        mouseIsDown = false;
+        if (isDragging) {
+            isDragging = false;
+            document.body.style.cursor = '';
+        }
+        clearTimeout(mouseHoldTimeout);
+    });
+
+    // 触屏（可选，和原脚本一致，未改）
+    modalImage.addEventListener("touchstart", (event) => {
+        if (event.touches.length === 2) {
+            // 双指缩放
+            const touch1 = event.touches[0];
+            const touch2 = event.touches[1];
+            initialDistance = Math.hypot(
+                touch2.pageX - touch1.pageX,
+                touch2.pageY - touch1.pageY
+            );
+        }
+        if (event.touches.length === 1) {
+            isDragging = true;
+            startX = event.touches[0].clientX;
+            startY = event.touches[0].clientY;
+        }
+    });
+    modalImage.addEventListener("touchmove", (event) => {
+        if (event.touches.length === 2) {
+            event.preventDefault();
+            const touch1 = event.touches[0];
+            const touch2 = event.touches[1];
+            const currentDistance = Math.hypot(
+                touch2.pageX - touch1.pageX,
+                touch2.pageY - touch1.pageY
+            );
+            const maxScale = Math.max(
+              (originalWidth || 1) / (modalImage.offsetWidth || 1),
+              (originalHeight || 1) / (modalImage.offsetHeight || 1),
+              1
+            );
+            let minScale = 1;
+            const zoomSpeed = 0.001;
+            scale += (currentDistance - initialDistance) * zoomSpeed;
+            scale = Math.min(Math.max(minScale, scale), maxScale);
+            modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+            initialDistance = currentDistance;
+        }
+        if (isDragging && event.touches.length === 1) {
+            event.preventDefault();
+            const dx = event.touches[0].clientX - startX;
+            const dy = event.touches[0].clientY - startY;
+            offsetX += dx;
+            offsetY += dy;
+            modalImage.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+            startX = event.touches[0].clientX;
+            startY = event.touches[0].clientY;
+        }
+    });
+    modalImage.addEventListener("touchend", () => {
+        isDragging = false;
+    });
+});
 </script>
 
 <!-- 计算并显示字数及预计阅读时间 -->
